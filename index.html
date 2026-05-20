@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="nl" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>U Festival</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#F03228">
+    <link rel="apple-touch-icon" href="./assets/logob.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-logo">
+            <img id="header-logo-img" src="./assets/logo_white.svg" alt="U Festival Logo">
+            <span class="header-title">FESTIVAL</span>
+        </div>
+        <div class="header-controls">
+            <button id="theme-toggle" class="control-btn" aria-label="Toggle dark mode">🌙</button>
+            <button id="lang-toggle" class="control-btn" aria-label="Toggle language">🇳🇱</button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-content">
+        
+        <!-- HOME SECTION (Phase 2) -->
+        <section id="home" class="page-section active">
+            <div class="hero">
+                <h1 data-i18n="home_welcome">WELKOM BIJ U FESTIVAL</h1>
+                <p data-i18n="home_subtitle" class="italic-text">Beleef de ultieme festival ervaring.</p>
+            </div>
+            
+            <div class="stages-grid">
+                <div class="stage-card">
+                    <img src="./assets/ponton.png" alt="Ponton Stage">
+                    <div class="stage-name" data-i18n="stage_ponton">Ponton</div>
+                </div>
+                <div class="stage-card">
+                    <img src="./assets/thelake.png" alt="The Lake Stage">
+                    <div class="stage-name" data-i18n="stage_lake">The Lake</div>
+                </div>
+                <div class="stage-card">
+                    <img src="./assets/theclub.png" alt="The Club Stage">
+                    <div class="stage-name" data-i18n="stage_club">The Club</div>
+                </div>
+                <div class="stage-card">
+                    <img src="./assets/hangar.png" alt="Hangar Stage">
+                    <div class="stage-name" data-i18n="stage_hangar">Hangar</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INFO SECTION (Phase 3) -->
+        <section id="info" class="page-section">
+            <h1 data-i18n="nav_info">FESTIVAL INFORMATION</h1>
+            <div id="info-accordion-container">
+                <!-- Accordions will be rendered here by info.js -->
+            </div>
+        </section>
+
+        <!-- LINEUP SECTION (Placeholder for Phase 4) -->
+        <section id="lineup" class="page-section">
+            <h1 data-i18n="nav_lineup">Lineup</h1>
+            <p>Content for Lineup section will be added in Phase 4.</p>
+        </section>
+
+        <!-- MAP SECTION (Placeholder for Phase 5) -->
+        <section id="map" class="page-section">
+            <h1 data-i18n="nav_map">Kaart</h1>
+            <p>Content for Map section will be added in Phase 5.</p>
+        </section>
+
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-target="home">
+            <span class="nav-icon">🏠</span>
+            <span data-i18n="nav_home">Home</span>
+        </button>
+        <button class="nav-item" data-target="info">
+            <span class="nav-icon">ℹ️</span>
+            <span data-i18n="nav_info">Info</span>
+        </button>
+        <button class="nav-item" data-target="lineup">
+            <span class="nav-icon">🎵</span>
+            <span data-i18n="nav_lineup">Lineup</span>
+        </button>
+        <button class="nav-item" data-target="map">
+            <span class="nav-icon">📍</span>
+            <span data-i18n="nav_map">Kaart</span>
+        </button>
+    </nav>
+
+    <!-- Scripts -->
+    <script src="./js/i18n.js"></script>
+    <script src="./js/app.js"></script>
+    <script src="./js/info.js"></script>
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    }, err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

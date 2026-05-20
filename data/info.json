@@ -1,0 +1,46 @@
+[
+    {
+        "id": "general",
+        "title": {
+            "nl": "Algemeen & contact",
+            "en": "General & contact"
+        },
+        "content": {
+            "nl": "<p>Welkom bij LoveU Festival 2026. Het festivalterrein is open van 10:00 tot 00:00. Voor algemene vragen kun je terecht bij de infobalie nabij de ingang.</p><p>Contact: info@ufestival.nl</p>",
+            "en": "<p>Welcome to LoveU Festival 2026. The festival grounds are open from 10:00 to 00:00. For general inquiries, please visit the info desk near the entrance.</p><p>Contact: info@ufestival.nl</p>"
+        }
+    },
+    {
+        "id": "accessibility",
+        "title": {
+            "nl": "Bereikbaarheid",
+            "en": "Accessibility"
+        },
+        "content": {
+            "nl": "<h4>Fiets</h4><p>Er is een grote gratis fietsenstalling aanwezig waar je jouw fiets de gehele dag kunt stallen.</p><h4>Auto</h4><p>Je kunt een parkingticket aanschaffen. Parkeren kan op P+R Papendorp, volg hiervoor de borden 'P online ticket'.</p>",
+            "en": "<h4>Bicycle</h4><p>There is a large free bicycle parking area available where you can park your bike all day.</p><h4>Car</h4><p>You can purchase a parking ticket. Parking is available at P+R Papendorp, follow the 'P online ticket' signs.</p>"
+        }
+    },
+    {
+        "id": "rules",
+        "title": {
+            "nl": "Huisregels",
+            "en": "House Rules"
+        },
+        "content": {
+            "nl": "<ul><li>Toegang vanaf 18 jaar (ID verplicht).</li><li>Eigen eten en drinken meenemen is niet toegestaan.</li><li>Zero-tolerance drugsbeleid.</li></ul>",
+            "en": "<ul><li>Access from 18 years (ID mandatory).</li><li>Bringing your own food and drinks is not allowed.</li><li>Zero-tolerance drugs policy.</li></ul>"
+        }
+    },
+    {
+        "id": "faq",
+        "title": {
+            "nl": "Veelgestelde Vragen (FAQ)",
+            "en": "Frequently Asked Questions (FAQ)"
+        },
+        "content": {
+            "nl": "<h4>Zijn er kluisjes?</h4><p>Ja, er zijn voldoende lockers aanwezig. Deze kun je ter plekke of vooraf online huren.</p><h4>Kan ik pinnen?</h4><p>Ja, het gehele festival is pin-only. Cash wordt nergens geaccepteerd.</p>",
+            "en": "<h4>Are there lockers?</h4><p>Yes, there are plenty of lockers available. You can rent them on site or online in advance.</p><h4>Can I pay by card?</h4><p>Yes, the entire festival is pin-only. Cash is not accepted anywhere.</p>"
+        }
+    }
+]
