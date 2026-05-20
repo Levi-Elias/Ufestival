@@ -2,7 +2,7 @@ const translations = {
     nl: {
         "nav_home": "Home",
         "nav_info": "Info",
-        "nav_lineup": "Lineup",
+        "nav_lineup": "Rooster",
         "nav_map": "Kaart",
         "home_welcome": "WELKOM BIJ U FESTIVAL",
         "home_subtitle": "Beleef de ultieme festival ervaring.",
