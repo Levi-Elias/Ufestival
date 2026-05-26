@@ -105,10 +105,18 @@ document.addEventListener('DOMContentLoaded', () => {
         timelineRow.appendChild(emptyCorner);
 
         for (let hour = 10; hour <= 23; hour++) {
-            const timeSlot = document.createElement('div');
-            timeSlot.className = 'timeline-slot';
-            timeSlot.textContent = `${hour}:00`;
-            timelineRow.appendChild(timeSlot);
+            for (let min = 0; min < 60; min += 15) {
+                const timeSlot = document.createElement('div');
+                timeSlot.className = 'timeline-slot';
+                if (min === 0) {
+                    timeSlot.textContent = `${hour}:00`;
+                    timeSlot.classList.add('hour-slot');
+                } else {
+                    timeSlot.textContent = `:${min}`;
+                    timeSlot.classList.add('quarter-slot');
+                }
+                timelineRow.appendChild(timeSlot);
+            }
         }
         gridWrapper.appendChild(timelineRow);
 
@@ -131,10 +139,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const actsContainer = document.createElement('div');
             actsContainer.className = 'acts-container';
 
-            // Background grid lines (one per hour = 4 quarters)
-            for (let i = 0; i < 14; i++) {
+            // Background grid lines (one per 15 mins)
+            for (let i = 0; i < 14 * 4; i++) {
                 const bgLine = document.createElement('div');
                 bgLine.className = 'bg-line';
+                if (i % 4 === 3) bgLine.classList.add('hour-line'); // The line at the end of the 4th quarter (xx:45 - xx+1:00) is the hour line
                 actsContainer.appendChild(bgLine);
             }
 
