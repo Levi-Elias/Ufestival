@@ -1,17 +1,26 @@
-const CACHE_NAME = 'ufestival-v1';
+const CACHE_NAME = 'ufestival-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './css/style.css',
   './js/app.js',
   './js/i18n.js',
+  './js/info.js',
+  './js/lineup.js',
+  './js/map.js',
+  './data/i18n.json',
+  './data/info.json',
+  './data/lineup.json',
   './manifest.json',
   './assets/logo_black.svg',
   './assets/logo_white.svg',
+  './assets/logob.png',
+  './assets/logow.png',
   './assets/ponton.png',
   './assets/thelake.png',
   './assets/theclub.png',
-  './assets/hangar.png'
+  './assets/hangar.png',
+  './assets/markers/kaart_festival_markers.svg'
 ];
 
 // Install event

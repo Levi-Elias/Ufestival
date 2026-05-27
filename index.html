@@ -85,10 +85,22 @@
             </div>
         </section>
 
-        <!-- MAP SECTION (Placeholder for Phase 5) -->
-        <section id="map" class="page-section">
-            <h1 data-i18n="nav_map">Kaart</h1>
-            <p>Content for Map section will be added in Phase 5.</p>
+        <!-- MAP SECTION (Phase 5) -->
+        <section id="map" class="page-section" style="padding: 0; display: flex; flex-direction: column; height: 100%;">
+            <h1 data-i18n="nav_map" style="padding: 20px 20px 10px 20px; flex-shrink: 0;">FESTIVAL MAP</h1>
+            <div class="map-viewport" id="map-viewport">
+                <div class="map-transform-container" id="map-transform-container">
+                    <img src="./assets/markers/kaart_festival_markers.svg" alt="Festival Map" id="festival-map-img">
+                    <div id="gps-dot" class="gps-dot"></div>
+                </div>
+                <div class="map-overlay-controls">
+                    <button id="gps-btn" class="map-control-btn" aria-label="Locate me">📍</button>
+                    <div class="zoom-controls">
+                        <button id="zoom-in-btn" class="map-control-btn">+</button>
+                        <button id="zoom-out-btn" class="map-control-btn">-</button>
+                    </div>
+                </div>
+            </div>
         </section>
 
     </main>
@@ -134,6 +146,7 @@
     <script src="./js/app.js"></script>
     <script src="./js/info.js"></script>
     <script src="./js/lineup.js"></script>
+    <script src="./js/map.js"></script>
     <script>
         // Register Service Worker
         if ('serviceWorker' in navigator) {
