@@ -19,6 +19,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const startTime = 10 * 60; // 10:00 in minutes
     const endTime = 23 * 60 + 45; // 23:45 in minutes
 
+    // Drag to scroll logic for the grid
+    let isDraggingGrid = false;
+    let gridStartX;
+    let gridScrollLeft;
+    let hasDragged = false;
+
+    scheduleGrid.addEventListener('mousedown', (e) => {
+        isDraggingGrid = true;
+        hasDragged = false;
+        scheduleGrid.style.cursor = 'grabbing';
+        gridStartX = e.pageX - scheduleGrid.offsetLeft;
+        gridScrollLeft = scheduleGrid.scrollLeft;
+    });
+
+    scheduleGrid.addEventListener('mouseleave', () => {
+        isDraggingGrid = false;
+        scheduleGrid.style.cursor = 'grab';
+    });
+
+    scheduleGrid.addEventListener('mouseup', () => {
+        isDraggingGrid = false;
+        scheduleGrid.style.cursor = 'grab';
+    });
+
+    scheduleGrid.addEventListener('mousemove', (e) => {
+        if (!isDraggingGrid) return;
+        const x = e.pageX - scheduleGrid.offsetLeft;
+        const walk = (x - gridStartX);
+        if (Math.abs(walk) > 5) {
+            hasDragged = true; // Mark as dragged if moved more than 5px
+        }
+        scheduleGrid.scrollLeft = gridScrollLeft - walk;
+    });
+
     // Fetch data
     fetch('./data/lineup.json')
         .then(response => response.json())
@@ -182,9 +216,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 actBlock.appendChild(actName);
                 actBlock.appendChild(favIcon);
                 
-                actBlock.addEventListener('click', () => {
-                    // Only open modal if there's an image or description beyond basic
-                    // We'll open for all, but maybe empty image is handled
+                actBlock.addEventListener('click', (e) => {
+                    // Prevent opening modal if the user was just dragging the grid
+                    if (hasDragged) {
+                        e.preventDefault();
+                        return;
+                    }
                     openModal(act);
                 });
 
@@ -200,18 +237,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openModal(act) {
         const lang = window.i18n ? window.i18n.getCurrentLang() : 'nl';
-        
-        modalImg.src = act.image || './assets/logo_black.svg';
-        if(!act.image) {
-            modalImg.style.objectFit = 'contain';
-            modalImg.style.padding = '20px';
+        const currentLang = lang;
+        const modalImageContainer = document.getElementById('modal-image-container');
+        if (act.image) {
+            modalImageContainer.innerHTML = `<img src="${act.image}" alt="${act.name}" class="modal-header-img">`;
+        } else if (act.video) {
+            modalImageContainer.innerHTML = `<div class="modal-video-container"><iframe src="${act.video}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
         } else {
-            modalImg.style.objectFit = 'cover';
-            modalImg.style.padding = '0';
+            modalImageContainer.innerHTML = `<div class="modal-header-placeholder"></div>`;
+        }
+
+        // Description
+        const descEl = document.getElementById('modal-desc');
+        // Add extra margin if there's a video AND an image, we can put video below description
+        let videoHtml = '';
+        if (act.video && act.image) {
+            videoHtml = `<div class="modal-video-container" style="margin-top: 15px;"><iframe src="${act.video}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`;
         }
         
-        modalName.textContent = act.name;
-        modalDesc.textContent = act.description[lang];
+        descEl.innerHTML = act.description[currentLang] + videoHtml;
         modalStageTime.textContent = `Stage: ${act.stage.charAt(0).toUpperCase() + act.stage.slice(1)} | ${act.start} - ${act.end}`;
         
         modal.setAttribute('data-active-id', act.id);

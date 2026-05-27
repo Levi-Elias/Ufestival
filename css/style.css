@@ -338,6 +338,13 @@ nav.bottom-nav {
   overflow-x: auto;
   padding: 0 10px 20px 10px;
   -webkit-overflow-scrolling: touch; /* smooth scroll on ios */
+  cursor: grab;
+  user-select: none; /* Prevents text selection dragging & auto-scroll */
+  -webkit-user-select: none;
+}
+
+.schedule-grid:active {
+  cursor: grabbing;
 }
 
 .schedule-grid-wrapper {
@@ -520,16 +527,41 @@ nav.bottom-nav {
 }
 
 .modal-header-img {
+.modal-image-container {
   width: 100%;
-  height: 200px;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
   background-color: #000;
 }
 
-.modal-header-img img {
+.modal-header-img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+}
+
+.modal-header-placeholder {
+  width: 100%;
+  height: 150px;
+  background-color: var(--color-secondary);
+}
+
+.modal-video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  height: 0;
+  overflow: hidden;
+}
+
+.modal-video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  opacity: 0.9;
+  border: 0;
 }
 
 .modal-body {
