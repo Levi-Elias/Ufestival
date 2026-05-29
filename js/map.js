@@ -56,6 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Pointer Events for Dragging ---
     mapViewport.addEventListener('pointerdown', (e) => {
+        // Don't start drag when clicking a control button
+        if (e.target.closest('button')) return;
+
         isDragging = true;
         startX = e.clientX - translateX;
         startY = e.clientY - translateY;

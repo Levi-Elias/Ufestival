@@ -59,6 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        // Could show a custom install button here if desired
+        
     });
 });

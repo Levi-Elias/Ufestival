@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ufestival-v2';
+const CACHE_NAME = 'ufestival-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

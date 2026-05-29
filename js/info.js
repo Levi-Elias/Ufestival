@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
             header.addEventListener('click', () => {
                 const isActive = header.classList.contains('active');
                 
-                // Close all other accordions (optional, can be removed if multiple can be open)
+                // Close all other accordions 
                 document.querySelectorAll('.accordion-header').forEach(h => {
                     h.classList.remove('active');
                     h.querySelector('.accordion-icon').innerHTML = '&#9654;';
