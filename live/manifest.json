@@ -1,0 +1,20 @@
+{
+  "name": "LoveU Festival 2026",
+  "short_name": "U Festival",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#F03228",
+  "icons": [
+    {
+      "src": "assets/logob.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/logob.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
