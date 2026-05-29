@@ -11,20 +11,44 @@
         :root {
             --red: #F03228;
             --blue: #247BA0;
-            --black: #111111;
-            --white: #FFFFFF;
-            --grey: #f4f4f4;
-            --border: #dddddd;
             --font: 'Sansation', sans-serif;
+
+            /* Light mode defaults */
+            --bg: #f4f4f4;
+            --surface: #FFFFFF;
+            --text: #111111;
+            --text-muted: #666666;
+            --border: #dddddd;
+            --header-bg: #111111;
+            --header-text: #FFFFFF;
+            --input-bg: #FFFFFF;
+            --stat-bg: #FFFFFF;
+            --table-hover: #f9f9f9;
+            --empty-color: #aaaaaa;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0d0d0d;
+            --surface: #1a1a1a;
+            --text: #f0f0f0;
+            --text-muted: #999999;
+            --border: #333333;
+            --header-bg: #000000;
+            --header-text: #FFFFFF;
+            --input-bg: #252525;
+            --stat-bg: #1a1a1a;
+            --table-hover: #222222;
+            --empty-color: #555555;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: var(--font);
-            background: var(--grey);
-            color: var(--black);
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
         }
 
         /* ── Login Screen ── */
@@ -33,11 +57,11 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background: var(--black);
+            background: #000000;
         }
 
         .login-box {
-            background: var(--white);
+            background: var(--surface);
             border-radius: 16px;
             padding: 40px;
             width: 340px;
@@ -47,7 +71,7 @@
 
         .login-box img { height: 50px; margin-bottom: 20px; }
         .login-box h1 { font-size: 1.4rem; color: var(--blue); margin-bottom: 5px; }
-        .login-box p { font-size: 0.85rem; color: #888; margin-bottom: 25px; font-style: italic; }
+        .login-box p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 25px; font-style: italic; }
 
         .login-box input {
             width: 100%;
@@ -79,8 +103,8 @@
         .btn-primary:hover { opacity: 0.85; }
         .btn-blue { background: var(--blue); color: var(--white); }
         .btn-blue:hover { opacity: 0.85; }
-        .btn-ghost { background: transparent; color: var(--black); border: 1px solid var(--border); }
-        .btn-ghost:hover { background: var(--grey); }
+        .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+        .btn-ghost:hover { background: var(--bg); }
         .btn-danger { background: #e74c3c; color: var(--white); }
         .btn-danger:hover { opacity: 0.85; }
         .btn-success { background: #27ae60; color: var(--white); }
@@ -92,8 +116,8 @@
         #admin-screen { display: none; }
 
         header {
-            background: var(--black);
-            color: var(--white);
+            background: var(--header-bg);
+            color: var(--header-text);
             padding: 0 25px;
             height: 60px;
             display: flex;
@@ -133,7 +157,8 @@
         .day-filter button {
             padding: 8px 20px;
             border: none;
-            background: var(--white);
+            background: var(--surface);
+            color: var(--text);
             font-family: var(--font);
             font-size: 0.9rem;
             cursor: pointer;
@@ -143,7 +168,7 @@
 
         /* ── Table ── */
         .table-wrap {
-            background: var(--white);
+            background: var(--surface);
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.07);
             overflow: hidden;
@@ -156,9 +181,9 @@
 
         tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
         tbody tr:last-child { border-bottom: none; }
-        tbody tr:hover { background: #f9f9f9; }
+        tbody tr:hover { background: var(--table-hover); }
 
-        tbody td { padding: 12px 15px; font-size: 0.9rem; vertical-align: middle; }
+        tbody td { padding: 12px 15px; font-size: 0.9rem; vertical-align: middle; color: var(--text); }
 
         .stage-badge {
             display: inline-block;
@@ -174,14 +199,14 @@
         .stage-badge.hangar { background: #16a085; }
 
         .act-name { font-weight: 700; }
-        .act-time { font-style: italic; color: #666; font-size: 0.85rem; }
+        .act-time { font-style: italic; color: var(--text-muted); font-size: 0.85rem; }
 
         .actions { display: flex; gap: 6px; }
 
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: #aaa;
+            color: var(--empty-color);
         }
         .empty-state span { font-size: 3rem; display: block; margin-bottom: 10px; }
 
@@ -199,7 +224,7 @@
         .modal-overlay.open { display: flex; }
 
         .modal {
-            background: var(--white);
+            background: var(--surface);
             border-radius: 16px;
             width: 100%;
             max-width: 600px;
@@ -216,7 +241,7 @@
             border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
-            background: var(--white);
+            background: var(--surface);
             z-index: 1;
         }
 
@@ -242,7 +267,7 @@
         .form-group { display: flex; flex-direction: column; gap: 5px; }
         .form-group.full { grid-column: 1 / -1; }
 
-        label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #555; }
+        label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
 
         input[type="text"], input[type="time"], select, textarea {
             padding: 10px 12px;
@@ -251,6 +276,8 @@
             font-family: var(--font);
             font-size: 0.95rem;
             outline: none;
+            background: var(--input-bg);
+            color: var(--text);
             transition: border-color 0.2s;
         }
 
@@ -272,8 +299,8 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%) translateY(100px);
-            background: var(--black);
-            color: var(--white);
+            background: var(--header-bg);
+            color: var(--header-text);
             padding: 12px 25px;
             border-radius: 30px;
             font-size: 0.9rem;
@@ -292,7 +319,7 @@
         }
 
         .stat-card {
-            background: var(--white);
+            background: var(--surface);
             border-radius: 10px;
             padding: 15px 20px;
             flex: 1;
@@ -302,7 +329,7 @@
         }
 
         .stat-card .stat-num { font-size: 2rem; font-weight: 700; color: var(--blue); }
-        .stat-card .stat-label { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
+        .stat-card .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
 
         @media (max-width: 600px) {
             .form-grid { grid-template-columns: 1fr; }
@@ -337,6 +364,7 @@
         </div>
         <div class="header-right">
             <button class="btn btn-success" onclick="exportJSON()">⬇ Export JSON</button>
+            <button id="theme-btn" class="btn btn-ghost" style="color:#fff;border-color:#555;" onclick="toggleTheme()">🌙</button>
             <button class="btn btn-ghost" style="color:#fff;border-color:#555;" onclick="doLogout()">Uitloggen</button>
         </div>
     </header>
@@ -461,6 +489,23 @@
     const STORAGE_KEY = 'ufestival_lineup_cms';
     let lineupData = [];
     let dayFilter = 'all';
+
+    // ── Theme ──
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        const btn = document.getElementById('theme-btn');
+        if (btn) btn.textContent = theme === 'dark' ? '☀' : '🌙';
+    }
+
+    function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme') || 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', next);
+        applyTheme(next);
+    }
+
+    // Apply saved theme on load (shared with main app)
+    applyTheme(localStorage.getItem('theme') || 'light');
 
     // ── Auth ──
     function doLogin() {
