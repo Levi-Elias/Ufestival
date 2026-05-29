@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U Festival – CMS</title>
+    <link rel="icon" href="./assets/logo_white.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red: #F03228;
+            --blue: #247BA0;
+            --black: #111111;
+            --white: #FFFFFF;
+            --grey: #f4f4f4;
+            --border: #dddddd;
+            --font: 'Sansation', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font);
+            background: var(--grey);
+            color: var(--black);
+            min-height: 100vh;
+        }
+
+        /* ── Login Screen ── */
+        #login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: var(--black);
+        }
+
+        .login-box {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 40px;
+            width: 340px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .login-box img { height: 50px; margin-bottom: 20px; }
+        .login-box h1 { font-size: 1.4rem; color: var(--blue); margin-bottom: 5px; }
+        .login-box p { font-size: 0.85rem; color: #888; margin-bottom: 25px; font-style: italic; }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: var(--font);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .login-box input:focus { border-color: var(--blue); }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-family: var(--font);
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: var(--red); color: var(--white); width: 100%; justify-content: center; font-size: 1rem; padding: 13px; }
+        .btn-primary:hover { opacity: 0.85; }
+        .btn-blue { background: var(--blue); color: var(--white); }
+        .btn-blue:hover { opacity: 0.85; }
+        .btn-ghost { background: transparent; color: var(--black); border: 1px solid var(--border); }
+        .btn-ghost:hover { background: var(--grey); }
+        .btn-danger { background: #e74c3c; color: var(--white); }
+        .btn-danger:hover { opacity: 0.85; }
+        .btn-success { background: #27ae60; color: var(--white); }
+        .btn-success:hover { opacity: 0.85; }
+
+        #login-error { color: var(--red); font-size: 0.85rem; margin-top: 10px; display: none; }
+
+        /* ── Admin Layout ── */
+        #admin-screen { display: none; }
+
+        header {
+            background: var(--black);
+            color: var(--white);
+            padding: 0 25px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .header-left img { height: 32px; }
+        .header-left span { font-weight: 700; font-size: 1.1rem; letter-spacing: 1px; }
+        .header-left small { color: #aaa; font-size: 0.75rem; font-style: italic; }
+
+        .header-right { display: flex; gap: 10px; }
+
+        .admin-body {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* ── Toolbar ── */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .toolbar-left { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        .day-filter { display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+        .day-filter button {
+            padding: 8px 20px;
+            border: none;
+            background: var(--white);
+            font-family: var(--font);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .day-filter button.active { background: var(--blue); color: var(--white); font-weight: 700; }
+
+        /* ── Table ── */
+        .table-wrap {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            overflow: hidden;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        thead { background: var(--black); color: var(--white); }
+        thead th { padding: 12px 15px; text-align: left; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
+
+        tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: #f9f9f9; }
+
+        tbody td { padding: 12px 15px; font-size: 0.9rem; vertical-align: middle; }
+
+        .stage-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+        .stage-badge.ponton { background: #e74c3c; }
+        .stage-badge.lake { background: #2980b9; }
+        .stage-badge.club { background: #8e44ad; }
+        .stage-badge.hangar { background: #16a085; }
+
+        .act-name { font-weight: 700; }
+        .act-time { font-style: italic; color: #666; font-size: 0.85rem; }
+
+        .actions { display: flex; gap: 6px; }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #aaa;
+        }
+        .empty-state span { font-size: 3rem; display: block; margin-bottom: 10px; }
+
+        /* ── Modal / Drawer ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: var(--white);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            z-index: 1;
+        }
+
+        .modal-header h2 { font-size: 1.2rem; color: var(--blue); }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            line-height: 1;
+        }
+
+        .modal-body { padding: 25px; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group.full { grid-column: 1 / -1; }
+
+        label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #555; }
+
+        input[type="text"], input[type="time"], select, textarea {
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: var(--font);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus { border-color: var(--blue); }
+
+        textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 20px 25px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--black);
+            color: var(--white);
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            z-index: 500;
+            transition: transform 0.3s;
+            white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* ── Stats bar ── */
+        .stats-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 15px 20px;
+            flex: 1;
+            min-width: 120px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            text-align: center;
+        }
+
+        .stat-card .stat-num { font-size: 2rem; font-weight: 700; color: var(--blue); }
+        .stat-card .stat-label { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
+
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full { grid-column: 1; }
+            thead th:nth-child(4), thead th:nth-child(5), tbody td:nth-child(4), tbody td:nth-child(5) { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="login-screen">
+    <div class="login-box">
+        <img src="./assets/logo_black.svg" alt="Logo">
+        <h1>CMS Login</h1>
+        <p>U Festival beheerderspaneel</p>
+        <input type="password" id="login-password" placeholder="Wachtwoord" autocomplete="current-password">
+        <button class="btn btn-primary" onclick="doLogin()">Inloggen</button>
+        <p id="login-error">Onjuist wachtwoord. Probeer opnieuw.</p>
+    </div>
+</div>
+
+<!-- ══ ADMIN ══ -->
+<div id="admin-screen">
+    <header>
+        <div class="header-left">
+            <img src="./assets/logo_white.svg" alt="Logo">
+            <div>
+                <span>U FESTIVAL CMS</span><br>
+                <small>Lineup Beheer</small>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="btn btn-success" onclick="exportJSON()">⬇ Export JSON</button>
+            <button class="btn btn-ghost" style="color:#fff;border-color:#555;" onclick="doLogout()">Uitloggen</button>
+        </div>
+    </header>
+
+    <div class="admin-body">
+
+        <!-- Stats -->
+        <div class="stats-bar" id="stats-bar"></div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <div class="day-filter">
+                    <button class="active" onclick="setDayFilter('all', this)">Alle dagen</button>
+                    <button onclick="setDayFilter('saturday', this)">Zaterdag</button>
+                    <button onclick="setDayFilter('sunday', this)">Zondag</button>
+                </div>
+            </div>
+            <button class="btn btn-blue" onclick="openModal()">+ Act toevoegen</button>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Artiest</th>
+                        <th>Dag</th>
+                        <th>Podium</th>
+                        <th>Start</th>
+                        <th>Einde</th>
+                        <th>Video</th>
+                        <th>Acties</th>
+                    </tr>
+                </thead>
+                <tbody id="acts-tbody"></tbody>
+            </table>
+        </div>
+
+        <p style="margin-top:15px; font-size:0.8rem; color:#aaa; text-align:right;">
+            Wijzigingen worden opgeslagen in je browser. Gebruik "Export JSON" om de definitieve <code>data/lineup.json</code> te vervangen.
+        </p>
+    </div>
+</div>
+
+<!-- ══ MODAL ══ -->
+<div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modal-title">Act toevoegen</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-grid">
+                <input type="hidden" id="edit-index">
+
+                <div class="form-group full">
+                    <label>Artiestennaam *</label>
+                    <input type="text" id="f-name" placeholder="bijv. Armin van Buuren">
+                </div>
+
+                <div class="form-group">
+                    <label>Dag *</label>
+                    <select id="f-day">
+                        <option value="saturday">Zaterdag</option>
+                        <option value="sunday">Zondag</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Podium *</label>
+                    <select id="f-stage">
+                        <option value="ponton">Ponton</option>
+                        <option value="lake">The Lake</option>
+                        <option value="club">The Club</option>
+                        <option value="hangar">Hangar</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Starttijd *</label>
+                    <input type="time" id="f-start">
+                </div>
+
+                <div class="form-group">
+                    <label>Eindtijd *</label>
+                    <input type="time" id="f-end">
+                </div>
+
+                <div class="form-group full">
+                    <label>Afbeelding (pad, bijv. ./assets/acts/armin.png)</label>
+                    <input type="text" id="f-image" placeholder="./assets/acts/naam.png">
+                </div>
+
+                <div class="form-group full">
+                    <label>YouTube embed URL (bijv. https://www.youtube.com/embed/xxxx)</label>
+                    <input type="text" id="f-video" placeholder="https://www.youtube.com/embed/...">
+                </div>
+
+                <div class="form-group full">
+                    <label>Beschrijving Nederlands</label>
+                    <textarea id="f-desc-nl" placeholder="Nederlandse omschrijving..."></textarea>
+                </div>
+
+                <div class="form-group full">
+                    <label>Beschrijving Engels</label>
+                    <textarea id="f-desc-en" placeholder="English description..."></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
+            <button class="btn btn-blue" onclick="saveAct()">Opslaan</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+    const PASSWORD = 'ufestival2026';
+    const STORAGE_KEY = 'ufestival_lineup_cms';
+    let lineupData = [];
+    let dayFilter = 'all';
+
+    // ── Auth ──
+    function doLogin() {
+        const pw = document.getElementById('login-password').value;
+        if (pw === PASSWORD) {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('admin-screen').style.display = 'block';
+            loadData();
+        } else {
+            document.getElementById('login-error').style.display = 'block';
+        }
+    }
+
+    document.getElementById('login-password').addEventListener('keydown', e => {
+        if (e.key === 'Enter') doLogin();
+    });
+
+    function doLogout() {
+        document.getElementById('admin-screen').style.display = 'none';
+        document.getElementById('login-screen').style.display = 'flex';
+        document.getElementById('login-password').value = '';
+    }
+
+    // ── Data ──
+    function loadData() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            lineupData = JSON.parse(stored);
+            renderTable();
+            renderStats();
+        } else {
+            fetch('./data/lineup.json')
+                .then(r => r.json())
+                .then(data => {
+                    lineupData = data;
+                    saveToStorage();
+                    renderTable();
+                    renderStats();
+                });
+        }
+    }
+
+    function saveToStorage() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(lineupData));
+    }
+
+    // ── Filter ──
+    function setDayFilter(day, btn) {
+        dayFilter = day;
+        document.querySelectorAll('.day-filter button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderTable();
+    }
+
+    // ── Render ──
+    function renderTable() {
+        const tbody = document.getElementById('acts-tbody');
+        const filtered = dayFilter === 'all' ? lineupData : lineupData.filter(a => a.day === dayFilter);
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><span>🎵</span>Geen acts gevonden.</div></td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(act => {
+            const realIndex = lineupData.indexOf(act);
+            const dayLabel = act.day === 'saturday' ? 'Zaterdag' : 'Zondag';
+            const hasVideo = act.video ? '✅' : '—';
+            return `
+                <tr>
+                    <td><div class="act-name">${act.name}</div></td>
+                    <td>${dayLabel}</td>
+                    <td><span class="stage-badge ${act.stage}">${act.stage}</span></td>
+                    <td class="act-time">${act.start}</td>
+                    <td class="act-time">${act.end}</td>
+                    <td>${hasVideo}</td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn btn-ghost" onclick="openModal(${realIndex})">✏️ Bewerk</button>
+                            <button class="btn btn-danger" onclick="deleteAct(${realIndex})">🗑</button>
+                        </div>
+                    </td>
+                </tr>`;
+        }).join('');
+    }
+
+    function renderStats() {
+        const total = lineupData.length;
+        const saturday = lineupData.filter(a => a.day === 'saturday').length;
+        const sunday = lineupData.filter(a => a.day === 'sunday').length;
+        const withVideo = lineupData.filter(a => a.video).length;
+
+        document.getElementById('stats-bar').innerHTML = `
+            <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Totaal acts</div></div>
+            <div class="stat-card"><div class="stat-num">${saturday}</div><div class="stat-label">Zaterdag</div></div>
+            <div class="stat-card"><div class="stat-num">${sunday}</div><div class="stat-label">Zondag</div></div>
+            <div class="stat-card"><div class="stat-num">${withVideo}</div><div class="stat-label">Met video</div></div>
+        `;
+    }
+
+    // ── Modal ──
+    function openModal(index = null) {
+        document.getElementById('modal-title').textContent = index !== null ? 'Act bewerken' : 'Act toevoegen';
+        document.getElementById('edit-index').value = index !== null ? index : '';
+
+        if (index !== null) {
+            const act = lineupData[index];
+            document.getElementById('f-name').value = act.name || '';
+            document.getElementById('f-day').value = act.day || 'saturday';
+            document.getElementById('f-stage').value = act.stage || 'ponton';
+            document.getElementById('f-start').value = act.start || '';
+            document.getElementById('f-end').value = act.end || '';
+            document.getElementById('f-image').value = act.image || '';
+            document.getElementById('f-video').value = act.video || '';
+            document.getElementById('f-desc-nl').value = (act.description && act.description.nl) || '';
+            document.getElementById('f-desc-en').value = (act.description && act.description.en) || '';
+        } else {
+            document.getElementById('f-name').value = '';
+            document.getElementById('f-day').value = 'saturday';
+            document.getElementById('f-stage').value = 'ponton';
+            document.getElementById('f-start').value = '';
+            document.getElementById('f-end').value = '';
+            document.getElementById('f-image').value = '';
+            document.getElementById('f-video').value = '';
+            document.getElementById('f-desc-nl').value = '';
+            document.getElementById('f-desc-en').value = '';
+        }
+
+        document.getElementById('modal-overlay').classList.add('open');
+    }
+
+    function closeModal() {
+        document.getElementById('modal-overlay').classList.remove('open');
+    }
+
+    // Close modal on overlay click
+    document.getElementById('modal-overlay').addEventListener('click', e => {
+        if (e.target === document.getElementById('modal-overlay')) closeModal();
+    });
+
+    function saveAct() {
+        const name = document.getElementById('f-name').value.trim();
+        const start = document.getElementById('f-start').value;
+        const end = document.getElementById('f-end').value;
+
+        if (!name || !start || !end) {
+            showToast('⚠️ Vul minimaal naam, start- en eindtijd in.');
+            return;
+        }
+
+        const act = {
+            id: name.toLowerCase().replace(/[^a-z0-9]/g, ''),
+            day: document.getElementById('f-day').value,
+            stage: document.getElementById('f-stage').value,
+            start,
+            end,
+            name,
+            image: document.getElementById('f-image').value.trim(),
+            video: document.getElementById('f-video').value.trim(),
+            description: {
+                nl: document.getElementById('f-desc-nl').value.trim(),
+                en: document.getElementById('f-desc-en').value.trim()
+            }
+        };
+
+        const indexStr = document.getElementById('edit-index').value;
+        if (indexStr !== '') {
+            lineupData[parseInt(indexStr)] = act;
+            showToast('✅ Act bijgewerkt!');
+        } else {
+            lineupData.push(act);
+            showToast('✅ Act toegevoegd!');
+        }
+
+        saveToStorage();
+        renderTable();
+        renderStats();
+        closeModal();
+    }
+
+    function deleteAct(index) {
+        if (!confirm(`Weet je zeker dat je "${lineupData[index].name}" wilt verwijderen?`)) return;
+        lineupData.splice(index, 1);
+        saveToStorage();
+        renderTable();
+        renderStats();
+        showToast('🗑️ Act verwijderd.');
+    }
+
+    // ── Export ──
+    function exportJSON() {
+        const json = JSON.stringify(lineupData, null, 4);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'lineup.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('📥 lineup.json gedownload! Vervang het bestand in /data/.');
+    }
+
+    // ── Toast ──
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
+    }
+</script>
+</body>
+</html>

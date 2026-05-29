@@ -53,14 +53,31 @@ document.addEventListener('DOMContentLoaded', () => {
         scheduleGrid.scrollLeft = gridScrollLeft - walk;
     });
 
-    // Fetch data
-    fetch('./data/lineup.json')
-        .then(response => response.json())
-        .then(data => {
-            lineupData = data;
-            renderSchedule(currentDay);
-        })
-        .catch(err => console.error("Error loading lineup data:", err));
+    // Load data: prefer CMS localStorage data, fall back to lineup.json
+    const CMS_KEY = 'ufestival_lineup_cms';
+
+    function loadLineup() {
+        const stored = localStorage.getItem(CMS_KEY);
+        if (stored) {
+            try {
+                lineupData = JSON.parse(stored);
+                renderSchedule(currentDay);
+                return;
+            } catch(e) {
+                console.warn('CMS data corrupt, falling back to JSON file.');
+            }
+        }
+        // Fallback: load from file
+        fetch('./data/lineup.json')
+            .then(response => response.json())
+            .then(data => {
+                lineupData = data;
+                renderSchedule(currentDay);
+            })
+            .catch(err => console.error('Error loading lineup data:', err));
+    }
+
+    loadLineup();
 
     // Tab switching
     saturdayBtn.addEventListener('click', () => {
@@ -259,6 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalStageTime.textContent = `Stage: ${act.stage.charAt(0).toUpperCase() + act.stage.slice(1)} | ${act.start} - ${act.end}`;
         
         modal.setAttribute('data-active-id', act.id);
+        document.getElementById('modal-name').textContent = act.name;
         
         const favs = getFavorites();
         modalFavBtn.innerHTML = favs.includes(act.id) ? '❤️ Verwijder uit favorieten' : '♡ Voeg toe aan favorieten';
