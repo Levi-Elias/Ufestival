@@ -334,7 +334,29 @@
         @media (max-width: 600px) {
             .form-grid { grid-template-columns: 1fr; }
             .form-group.full { grid-column: 1; }
-            thead th:nth-child(4), thead th:nth-child(5), tbody td:nth-child(4), tbody td:nth-child(5) { display: none; }
+            
+            /* Header */
+            header { padding: 0 15px; height: 55px; }
+            .header-left span { font-size: 0.9rem; }
+            .header-right .btn { padding: 6px 10px; font-size: 0.8rem; }
+            .hide-mobile { display: none; }
+            
+            /* Login box */
+            .login-box { width: 90%; padding: 30px 20px; }
+
+            /* Table */
+            .table-wrap { overflow-x: auto; border-radius: 8px; }
+            table { min-width: 750px; }
+            
+            /* Toolbar */
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .toolbar-left { justify-content: center; }
+            .toolbar .btn-blue { width: 100%; justify-content: center; }
+            
+            /* Stats */
+            .stats-bar { gap: 10px; }
+            .stat-card { min-width: 45%; padding: 10px; }
+            .stat-card .stat-num { font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -345,10 +367,10 @@
     <div class="login-box">
         <img src="./assets/logo_black.svg" alt="Logo">
         <h1>CMS Login</h1>
-        <p>U Festival beheerderspaneel</p>
+        <p data-i18n="login_sub">U Festival beheerderspaneel</p>
         <input type="password" id="login-password" placeholder="Wachtwoord" autocomplete="current-password">
-        <button class="btn btn-primary" onclick="doLogin()">Inloggen</button>
-        <p id="login-error">Onjuist wachtwoord. Probeer opnieuw.</p>
+        <button class="btn btn-primary" onclick="doLogin()" data-i18n="login_btn">Inloggen</button>
+        <p id="login-error" data-i18n="login_err">Onjuist wachtwoord. Probeer opnieuw.</p>
     </div>
 </div>
 
@@ -359,13 +381,14 @@
             <img src="./assets/logo_white.svg" alt="Logo">
             <div>
                 <span>U FESTIVAL CMS</span><br>
-                <small>Lineup Beheer</small>
+                <small data-i18n="header_sub">Lineup Beheer</small>
             </div>
         </div>
         <div class="header-right">
-            <button class="btn btn-success" onclick="exportJSON()">⬇ Export JSON</button>
+            <button class="btn btn-success" onclick="exportJSON()">⬇ <span class="hide-mobile">Export JSON</span></button>
+            <button id="lang-toggle-cms" class="btn btn-ghost" style="color:#fff;border-color:#555;" onclick="toggleLang()">🇳🇱</button>
             <button id="theme-btn" class="btn btn-ghost" style="color:#fff;border-color:#555;" onclick="toggleTheme()">🌙</button>
-            <button class="btn btn-ghost" style="color:#fff;border-color:#555;" onclick="doLogout()">Uitloggen</button>
+            <button class="btn btn-ghost" style="color:#fff;border-color:#555;" onclick="doLogout()" data-i18n="logout">Uitloggen</button>
         </div>
     </header>
 
@@ -378,12 +401,12 @@
         <div class="toolbar">
             <div class="toolbar-left">
                 <div class="day-filter">
-                    <button class="active" onclick="setDayFilter('all', this)">Alle dagen</button>
-                    <button onclick="setDayFilter('saturday', this)">Zaterdag</button>
-                    <button onclick="setDayFilter('sunday', this)">Zondag</button>
+                    <button class="active" onclick="setDayFilter('all', this)" data-i18n="filter_all">Alle dagen</button>
+                    <button onclick="setDayFilter('saturday', this)" data-i18n="filter_sat">Zaterdag</button>
+                    <button onclick="setDayFilter('sunday', this)" data-i18n="filter_sun">Zondag</button>
                 </div>
             </div>
-            <button class="btn btn-blue" onclick="openModal()">+ Act toevoegen</button>
+            <button class="btn btn-blue" onclick="openModal()" data-i18n="btn_add">+ Act toevoegen</button>
         </div>
 
         <!-- Table -->
@@ -391,13 +414,13 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Artiest</th>
-                        <th>Dag</th>
-                        <th>Podium</th>
-                        <th>Start</th>
-                        <th>Einde</th>
+                        <th data-i18n="th_artist">Artiest</th>
+                        <th data-i18n="th_day">Dag</th>
+                        <th data-i18n="th_stage">Podium</th>
+                        <th data-i18n="th_start">Start</th>
+                        <th data-i18n="th_end">Einde</th>
                         <th>Video</th>
-                        <th>Acties</th>
+                        <th data-i18n="th_actions">Acties</th>
                     </tr>
                 </thead>
                 <tbody id="acts-tbody"></tbody>
@@ -422,20 +445,20 @@
                 <input type="hidden" id="edit-index">
 
                 <div class="form-group full">
-                    <label>Artiestennaam *</label>
+                    <label data-i18n="lbl_name">Artiestennaam *</label>
                     <input type="text" id="f-name" placeholder="bijv. Armin van Buuren">
                 </div>
 
                 <div class="form-group">
-                    <label>Dag *</label>
+                    <label data-i18n="lbl_day">Dag *</label>
                     <select id="f-day">
-                        <option value="saturday">Zaterdag</option>
-                        <option value="sunday">Zondag</option>
+                        <option value="saturday" data-i18n="filter_sat">Zaterdag</option>
+                        <option value="sunday" data-i18n="filter_sun">Zondag</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label>Podium *</label>
+                    <label data-i18n="lbl_stage">Podium *</label>
                     <select id="f-stage">
                         <option value="ponton">Ponton</option>
                         <option value="lake">The Lake</option>
@@ -445,39 +468,39 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Starttijd *</label>
+                    <label data-i18n="lbl_start">Starttijd *</label>
                     <input type="time" id="f-start">
                 </div>
 
                 <div class="form-group">
-                    <label>Eindtijd *</label>
+                    <label data-i18n="lbl_end">Eindtijd *</label>
                     <input type="time" id="f-end">
                 </div>
 
                 <div class="form-group full">
-                    <label>Afbeelding (pad, bijv. ./assets/acts/armin.png)</label>
+                    <label data-i18n="lbl_img">Afbeelding (pad, bijv. ./assets/acts/armin.png)</label>
                     <input type="text" id="f-image" placeholder="./assets/acts/naam.png">
                 </div>
 
                 <div class="form-group full">
-                    <label>YouTube embed URL (bijv. https://www.youtube.com/embed/xxxx)</label>
+                    <label data-i18n="lbl_vid">YouTube embed URL (bijv. https://www.youtube.com/embed/xxxx)</label>
                     <input type="text" id="f-video" placeholder="https://www.youtube.com/embed/...">
                 </div>
 
                 <div class="form-group full">
-                    <label>Beschrijving Nederlands</label>
+                    <label data-i18n="lbl_desc_nl">Beschrijving Nederlands</label>
                     <textarea id="f-desc-nl" placeholder="Nederlandse omschrijving..."></textarea>
                 </div>
 
                 <div class="form-group full">
-                    <label>Beschrijving Engels</label>
+                    <label data-i18n="lbl_desc_en">Beschrijving Engels</label>
                     <textarea id="f-desc-en" placeholder="English description..."></textarea>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-ghost" onclick="closeModal()">Annuleren</button>
-            <button class="btn btn-blue" onclick="saveAct()">Opslaan</button>
+            <button class="btn btn-ghost" onclick="closeModal()" data-i18n="btn_cancel">Annuleren</button>
+            <button class="btn btn-blue" onclick="saveAct()" data-i18n="btn_save">Opslaan</button>
         </div>
     </div>
 </div>
@@ -489,6 +512,86 @@
     const STORAGE_KEY = 'ufestival_lineup_cms';
     let lineupData = [];
     let dayFilter = 'all';
+
+    // ── Translation ──
+    const i18nCMS = {
+        nl: {
+            login_sub: "U Festival beheerderspaneel",
+            login_btn: "Inloggen",
+            login_err: "Onjuist wachtwoord. Probeer opnieuw.",
+            header_sub: "Lineup Beheer",
+            logout: "Uitloggen",
+            filter_all: "Alle dagen",
+            filter_sat: "Zaterdag",
+            filter_sun: "Zondag",
+            btn_add: "+ Act toevoegen",
+            th_artist: "Artiest", th_day: "Dag", th_stage: "Podium", th_start: "Start", th_end: "Einde", th_actions: "Acties",
+            lbl_name: "Artiestennaam *", lbl_day: "Dag *", lbl_stage: "Podium *", lbl_start: "Starttijd *", lbl_end: "Eindtijd *",
+            lbl_img: "Afbeelding (pad, bijv. ./assets/acts/armin.png)", lbl_vid: "YouTube embed URL (bijv. https://www.youtube.com/embed/xxxx)",
+            lbl_desc_nl: "Beschrijving Nederlands", lbl_desc_en: "Beschrijving Engels",
+            btn_cancel: "Annuleren", btn_save: "Opslaan",
+            stat_tot: "Totaal acts", stat_sat: "Zaterdag", stat_sun: "Zondag", stat_vid: "Met video",
+            empty: "Geen acts gevonden.",
+            edit: "✏️ Bewerk",
+            modal_add: "Act toevoegen", modal_edit: "Act bewerken",
+            pwd_placeholder: "Wachtwoord"
+        },
+        en: {
+            login_sub: "U Festival Admin Panel",
+            login_btn: "Login",
+            login_err: "Incorrect password. Try again.",
+            header_sub: "Lineup Management",
+            logout: "Logout",
+            filter_all: "All days",
+            filter_sat: "Saturday",
+            filter_sun: "Sunday",
+            btn_add: "+ Add Act",
+            th_artist: "Artist", th_day: "Day", th_stage: "Stage", th_start: "Start", th_end: "End", th_actions: "Actions",
+            lbl_name: "Artist name *", lbl_day: "Day *", lbl_stage: "Stage *", lbl_start: "Start time *", lbl_end: "End time *",
+            lbl_img: "Image (path, e.g. ./assets/acts/armin.png)", lbl_vid: "YouTube embed URL (e.g. https://www.youtube.com/embed/xxxx)",
+            lbl_desc_nl: "Description Dutch", lbl_desc_en: "Description English",
+            btn_cancel: "Cancel", btn_save: "Save",
+            stat_tot: "Total acts", stat_sat: "Saturday", stat_sun: "Sunday", stat_vid: "With video",
+            empty: "No acts found.",
+            edit: "✏️ Edit",
+            modal_add: "Add Act", modal_edit: "Edit Act",
+            pwd_placeholder: "Password"
+        }
+    };
+
+    let currentLang = localStorage.getItem('language') || 'nl';
+
+    function applyLang() {
+        const d = i18nCMS[currentLang];
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (d[key]) el.textContent = d[key];
+        });
+        document.getElementById('login-password').placeholder = d.pwd_placeholder;
+        
+        const langBtn = document.getElementById('lang-toggle-cms');
+        if(langBtn) langBtn.textContent = currentLang === 'nl' ? '🇳🇱' : '🇬🇧';
+        
+        // re-render dynamic content to translate
+        if (document.getElementById('admin-screen').style.display !== 'none') {
+            renderTable();
+            renderStats();
+            // Re-apply modal title if open
+            if(document.getElementById('modal-overlay').classList.contains('open')){
+                const isEdit = document.getElementById('edit-index').value !== '';
+                document.getElementById('modal-title').textContent = isEdit ? d.modal_edit : d.modal_add;
+            }
+        }
+    }
+
+    function toggleLang() {
+        currentLang = currentLang === 'nl' ? 'en' : 'nl';
+        localStorage.setItem('language', currentLang);
+        applyLang();
+    }
+
+    // Initialize translations
+    applyLang();
 
     // ── Theme ──
     function applyTheme(theme) {
@@ -565,14 +668,15 @@
         const tbody = document.getElementById('acts-tbody');
         const filtered = dayFilter === 'all' ? lineupData : lineupData.filter(a => a.day === dayFilter);
 
+        const d = i18nCMS[currentLang];
         if (filtered.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><span>🎵</span>Geen acts gevonden.</div></td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><span>🎵</span>${d.empty}</div></td></tr>`;
             return;
         }
 
         tbody.innerHTML = filtered.map(act => {
             const realIndex = lineupData.indexOf(act);
-            const dayLabel = act.day === 'saturday' ? 'Zaterdag' : 'Zondag';
+            const dayLabel = act.day === 'saturday' ? d.filter_sat : d.filter_sun;
             const hasVideo = act.video ? '✅' : '—';
             return `
                 <tr>
@@ -584,7 +688,7 @@
                     <td>${hasVideo}</td>
                     <td>
                         <div class="actions">
-                            <button class="btn btn-ghost" onclick="openModal(${realIndex})">✏️ Bewerk</button>
+                            <button class="btn btn-ghost" onclick="openModal(${realIndex})">${d.edit}</button>
                             <button class="btn btn-danger" onclick="deleteAct(${realIndex})">🗑</button>
                         </div>
                     </td>
@@ -598,17 +702,19 @@
         const sunday = lineupData.filter(a => a.day === 'sunday').length;
         const withVideo = lineupData.filter(a => a.video).length;
 
+        const d = i18nCMS[currentLang];
         document.getElementById('stats-bar').innerHTML = `
-            <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">Totaal acts</div></div>
-            <div class="stat-card"><div class="stat-num">${saturday}</div><div class="stat-label">Zaterdag</div></div>
-            <div class="stat-card"><div class="stat-num">${sunday}</div><div class="stat-label">Zondag</div></div>
-            <div class="stat-card"><div class="stat-num">${withVideo}</div><div class="stat-label">Met video</div></div>
+            <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">${d.stat_tot}</div></div>
+            <div class="stat-card"><div class="stat-num">${saturday}</div><div class="stat-label">${d.stat_sat}</div></div>
+            <div class="stat-card"><div class="stat-num">${sunday}</div><div class="stat-label">${d.stat_sun}</div></div>
+            <div class="stat-card"><div class="stat-num">${withVideo}</div><div class="stat-label">${d.stat_vid}</div></div>
         `;
     }
 
     // ── Modal ──
     function openModal(index = null) {
-        document.getElementById('modal-title').textContent = index !== null ? 'Act bewerken' : 'Act toevoegen';
+        const d = i18nCMS[currentLang];
+        document.getElementById('modal-title').textContent = index !== null ? d.modal_edit : d.modal_add;
         document.getElementById('edit-index').value = index !== null ? index : '';
 
         if (index !== null) {
