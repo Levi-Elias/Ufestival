@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const installModalBtn = document.getElementById('install-modal-btn');
     const installModalClose = document.getElementById('install-modal-close');
     const installModalCancel = document.getElementById('install-modal-cancel');
+    const installNeverAsk = document.getElementById('install-never-ask');
     
     window.addEventListener('beforeinstallprompt', (e) => {
         // Prevent the mini-infobar from appearing on mobile
@@ -73,15 +74,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Show popup after 5 seconds (unconditionally so the user can test the design)
+    // Show popup after 5 seconds (if user hasn't opted out)
     setTimeout(() => {
-        if (installModal) {
+        if (installModal && localStorage.getItem('pwa_install_never_ask') !== 'true') {
             installModal.classList.add('active');
         }
     }, 5000);
 
     const closeInstallModal = () => {
         if (installModal) {
+            if (installNeverAsk && installNeverAsk.checked) {
+                localStorage.setItem('pwa_install_never_ask', 'true');
+            }
             installModal.classList.remove('active');
         }
     };

@@ -9,7 +9,12 @@ const translations = {
         "stage_ponton": "Ponton",
         "stage_lake": "The Lake",
         "stage_club": "The Club",
-        "stage_hangar": "Hangar"
+        "stage_hangar": "Hangar",
+        "install_title": "App Installeren",
+        "install_desc": "Wil je de U Festival app installeren op je apparaat voor een betere ervaring en offline toegang?",
+        "install_never_ask": "Niet nog een keer vragen",
+        "install_btn": "Installeren",
+        "install_later": "Later"
     },
     en: {
         "nav_home": "Home",
@@ -21,7 +26,12 @@ const translations = {
         "stage_ponton": "Ponton",
         "stage_lake": "The Lake",
         "stage_club": "The Club",
-        "stage_hangar": "Hangar"
+        "stage_hangar": "Hangar",
+        "install_title": "Install App",
+        "install_desc": "Do you want to install the U Festival app on your device for a better experience and offline access?",
+        "install_never_ask": "Do not ask again",
+        "install_btn": "Install",
+        "install_later": "Later"
     }
 };
 
