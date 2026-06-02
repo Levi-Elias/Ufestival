@@ -54,11 +54,62 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // PWA Install prompt handling (basic setup)
+    // PWA Install prompt handling
     let deferredPrompt;
+    const installBtn = document.getElementById('install-btn');
+    const installModal = document.getElementById('install-modal');
+    const installModalBtn = document.getElementById('install-modal-btn');
+    const installModalClose = document.getElementById('install-modal-close');
+    const installModalCancel = document.getElementById('install-modal-cancel');
+    
     window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent the mini-infobar from appearing on mobile
         e.preventDefault();
+        // Stash the event so it can be triggered later.
         deferredPrompt = e;
-        
+        // Update UI notify the user they can install the PWA
+        if (installBtn) {
+            installBtn.style.display = 'flex';
+        }
     });
+
+    // Show popup after 5 seconds (unconditionally so the user can test the design)
+    setTimeout(() => {
+        if (installModal) {
+            installModal.classList.add('active');
+        }
+    }, 5000);
+
+    const closeInstallModal = () => {
+        if (installModal) {
+            installModal.classList.remove('active');
+        }
+    };
+
+    if (installModalClose) installModalClose.addEventListener('click', closeInstallModal);
+    if (installModalCancel) installModalCancel.addEventListener('click', closeInstallModal);
+
+    const performInstall = async () => {
+        if (deferredPrompt) {
+            // Show the install prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to the install prompt: ${outcome}`);
+            // We've used the prompt, and can't use it again, throw it away
+            deferredPrompt = null;
+            // Hide the app provided install promotion
+            if (installBtn) installBtn.style.display = 'none';
+            closeInstallModal();
+        } else {
+            alert("Installatie via de browser is momenteel niet beschikbaar. Dit kan komen doordat de app al geïnstalleerd is, of omdat je de bestanden direct opent in plaats van via een lokale webserver (localhost).");
+            closeInstallModal();
+        }
+    };
+
+    if (installModalBtn) installModalBtn.addEventListener('click', performInstall);
+    
+    if (installBtn) {
+        installBtn.addEventListener('click', performInstall);
+    }
 });
