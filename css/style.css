@@ -5,7 +5,7 @@
   --color-primary: #000000;
   --color-secondary: #247BA0;
   --color-info: #E3B505;
-  
+
   --bg-color: var(--color-base);
   --text-color: var(--color-primary);
   --nav-bg: var(--color-accent);
@@ -20,7 +20,7 @@
   /* Colors - Dark Mode */
   --color-base: #000000;
   --color-primary: #FFFFFF;
-  
+
   --bg-color: var(--color-base);
   --text-color: var(--color-primary);
   --nav-bg: var(--color-accent);
@@ -42,12 +42,19 @@ body {
   color: var(--text-color);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  padding-top: 60px; /* For fixed header */
-  padding-bottom: 70px; /* For fixed bottom nav */
+  padding-top: 60px;
+  /* For fixed header */
+  padding-bottom: 70px;
+  /* For fixed bottom nav */
   transition: background-color 0.3s, color 0.3s;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
   color: var(--color-secondary);
 }
@@ -56,7 +63,8 @@ p {
   font-weight: 400;
 }
 
-button, .italic-text {
+button,
+.italic-text {
   font-weight: 300;
   font-style: italic;
 }
@@ -68,7 +76,8 @@ header {
   left: 0;
   width: 100%;
   height: 60px;
-  background-color: var(--text-color); /* Black in light mode, White in dark mode, based on logo visibility */
+  background-color: var(--text-color);
+  /* Black in light mode, White in dark mode, based on logo visibility */
   color: var(--bg-color);
   display: flex;
   align-items: center;
@@ -178,8 +187,15 @@ nav.bottom-nav {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Home Section Styles */
@@ -207,7 +223,7 @@ nav.bottom-nav {
   position: relative;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   aspect-ratio: 16/9;
   background-color: var(--card-bg);
 }
@@ -225,7 +241,7 @@ nav.bottom-nav {
   left: 0;
   width: 100%;
   padding: 15px;
-  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
   color: #FFFFFF;
   font-size: 1.2rem;
   font-weight: 700;
@@ -234,7 +250,8 @@ nav.bottom-nav {
 
 /* Info Section Accordion Styles */
 #info {
-  padding: 0; /* Removing default padding for full width accordions */
+  padding: 0;
+  /* Removing default padding for full width accordions */
 }
 
 #info h1 {
@@ -280,7 +297,9 @@ nav.bottom-nav {
   color: var(--text-color);
 }
 
-.accordion-content p, .accordion-content h4, .accordion-content ul {
+.accordion-content p,
+.accordion-content h4,
+.accordion-content ul {
   padding: 15px 20px;
   margin: 0;
 }
@@ -337,9 +356,11 @@ nav.bottom-nav {
   width: 100%;
   overflow-x: auto;
   padding: 0 10px 20px 10px;
-  -webkit-overflow-scrolling: touch; /* smooth scroll on ios */
+  -webkit-overflow-scrolling: touch;
+  /* smooth scroll on ios */
   cursor: grab;
-  user-select: none; /* Prevents text selection dragging & auto-scroll */
+  user-select: none;
+  /* Prevents text selection dragging & auto-scroll */
   -webkit-user-select: none;
 }
 
@@ -348,7 +369,8 @@ nav.bottom-nav {
 }
 
 .schedule-grid-wrapper {
-  width: 2400px; /* Increased to fit 15-min columns comfortably */
+  width: 2400px;
+  /* Increased to fit 15-min columns comfortably */
   display: flex;
   flex-direction: column;
 }
@@ -368,7 +390,8 @@ nav.bottom-nav {
   flex: 1;
   text-align: left;
   padding-left: 2px;
-  border-left: 1px solid transparent; /* Align visually with bg-lines */
+  border-left: 1px solid transparent;
+  /* Align visually with bg-lines */
 }
 
 .timeline-slot.hour-slot {
@@ -381,7 +404,8 @@ nav.bottom-nav {
   font-size: 0.8rem;
   color: var(--text-color);
   opacity: 0.6;
-  padding-top: 5px; /* push it down slightly to distinguish */
+  padding-top: 5px;
+  /* push it down slightly to distinguish */
 }
 
 .schedule-row {
@@ -416,11 +440,13 @@ nav.bottom-nav {
 .bg-line {
   flex: 1;
   border-right: 1px solid var(--text-color);
-  opacity: 0.15; /* lighter for quarters */
+  opacity: 0.15;
+  /* lighter for quarters */
 }
 
 .bg-line.hour-line {
-  opacity: 0.5; /* darker for full hours */
+  opacity: 0.5;
+  /* darker for full hours */
 }
 
 .bg-line:last-child {
@@ -441,7 +467,7 @@ nav.bottom-nav {
   cursor: pointer;
   overflow: hidden;
   transition: transform 0.2s, background-color 0.2s;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .act-block-grid:hover {
@@ -496,7 +522,7 @@ nav.bottom-nav {
   position: relative;
   transform: translateY(20px);
   transition: transform 0.3s;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
 .modal-overlay.active .modal-content {
@@ -507,7 +533,7 @@ nav.bottom-nav {
   position: absolute;
   top: 10px;
   right: 15px;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   color: #fff;
   border: none;
   font-size: 1.5rem;
@@ -523,7 +549,7 @@ nav.bottom-nav {
 }
 
 .modal-close-btn:active {
-  background: rgba(0,0,0,0.8);
+  background: rgba(0, 0, 0, 0.8);
 }
 
 
@@ -550,7 +576,8 @@ nav.bottom-nav {
 .modal-video-container {
   position: relative;
   width: 100%;
-  padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+  padding-bottom: 56.25%;
+  /* 16:9 Aspect Ratio */
   height: 0;
   overflow: hidden;
 }
@@ -612,7 +639,7 @@ nav.bottom-nav {
   height: calc(100vh - 220px);
   min-height: 350px;
   border-radius: 8px;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
   touch-action: none;
 }
 
@@ -630,7 +657,8 @@ nav.bottom-nav {
   width: auto;
   max-width: none;
   display: block;
-  pointer-events: none; /* Let the container handle drag events */
+  pointer-events: none;
+  /* Let the container handle drag events */
 }
 
 .map-overlay-controls {
@@ -650,7 +678,7 @@ nav.bottom-nav {
   background-color: var(--color-base);
   color: var(--color-primary);
   border: 1px solid var(--border-color);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   font-size: 1.2rem;
   display: flex;
   align-items: center;
@@ -671,7 +699,7 @@ nav.bottom-nav {
   border-radius: 25px;
   padding: 5px;
   border: 1px solid var(--border-color);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .zoom-controls .map-control-btn {
@@ -693,7 +721,8 @@ nav.bottom-nav {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: none; /* Hidden until GPS is active */
+  display: none;
+  /* Hidden until GPS is active */
   z-index: 5;
 }
 
@@ -710,6 +739,13 @@ nav.bottom-nav {
 }
 
 @keyframes gpsPulse {
-  0% { transform: scale(0.3); opacity: 1; }
-  100% { transform: scale(1.5); opacity: 0; }
+  0% {
+    transform: scale(0.3);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
 }

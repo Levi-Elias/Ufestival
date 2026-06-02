@@ -97,3 +97,264 @@ https://animejs.com/
 beste manier om een cms te kunnen maken met alleen javascript html css en json
 
 exporteerbaar json en instructie
+
+
+
+map js old version:
+
+document.addEventListener('DOMContentLoaded', () => {
+    const mapViewport = document.getElementById('map-viewport');
+    const transformContainer = document.getElementById('map-transform-container');
+    const mapImg = document.getElementById('festival-map-img');
+    const zoomInBtn = document.getElementById('zoom-in-btn');
+    const zoomOutBtn = document.getElementById('zoom-out-btn');
+    const gpsBtn = document.getElementById('gps-btn');
+    const gpsDot = document.getElementById('gps-dot');
+
+    if (!mapViewport || !transformContainer) return;
+
+    let scale = 1;
+    let translateX = 0;
+    let translateY = 0;
+    let mapGraphic = mapImg;
+
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+
+    // Minimum scale to fit image width
+    const MIN_SCALE = 1;
+    const MAX_SCALE = 5;
+
+    const stageMarkers = [
+        { stage: 'ponton', cx: 496.9, cy: 849.15 },
+        { stage: 'lake', cx: 1256.98, cy: 615.25 },
+        { stage: 'club', cx: 2102.13, cy: 231.18 },
+        { stage: 'hangar', cx: 1614.31, cy: 528.68 }
+    ];
+
+    function updateTransform() {
+        const graphic = mapGraphic || mapImg;
+        if (!graphic) return;
+
+        const rect = mapViewport.getBoundingClientRect();
+        const imgWidth = graphic.clientWidth * scale;
+        const imgHeight = graphic.clientHeight * scale;
+
+        const minX = Math.min(0, rect.width - imgWidth);
+        const minY = Math.min(0, rect.height - imgHeight);
+
+        translateX = Math.max(minX, Math.min(0, translateX));
+        translateY = Math.max(minY, Math.min(0, translateY));
+
+        transformContainer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+
+    function getStageKeyForCircle(circle) {
+        const cx = parseFloat(circle.getAttribute('cx') || '0');
+        const cy = parseFloat(circle.getAttribute('cy') || '0');
+
+        let matchedStage = null;
+        let minDistance = Infinity;
+
+        stageMarkers.forEach(marker => {
+            const distance = Math.hypot(cx - marker.cx, cy - marker.cy);
+            if (distance < minDistance) {
+                minDistance = distance;
+                matchedStage = marker.stage;
+            }
+        });
+
+        return minDistance < 15 ? matchedStage : null;
+    }
+
+    function attachMapMarkers(svg) {
+        const circles = svg.querySelectorAll('circle[r]');
+        circles.forEach(circle => {
+            const r = parseFloat(circle.getAttribute('r') || '0');
+            if (isNaN(r) || r < 30) return;
+
+            const stageKey = getStageKeyForCircle(circle);
+            if (!stageKey) return;
+
+            // Ensure pointer events work on this circle and its parents
+            circle.style.pointerEvents = 'auto';
+            circle.dataset.stage = stageKey;
+            circle.style.cursor = 'pointer';
+            circle.style.transition = 'filter 0.2s';
+            
+            circle.addEventListener('mouseover', () => {
+                circle.style.filter = 'brightness(1.2)';
+            });
+            
+            circle.addEventListener('mouseout', () => {
+                circle.style.filter = 'brightness(1)';
+            });
+
+            circle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (window.showStageLineup) {
+                    window.showStageLineup(stageKey);
+                }
+            });
+            
+            // Also attach to parent group if it exists
+            let parent = circle.parentElement;
+            if (parent && parent.tagName === 'g') {
+                parent.style.pointerEvents = 'auto';
+                parent.style.cursor = 'pointer';
+                parent.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (window.showStageLineup) {
+                        window.showStageLineup(stageKey);
+                    }
+                });
+            }
+        });
+    }
+
+    function loadInlineMap() {
+        fetch('./assets/markers/kaart_festival_markers.svg')
+            .then(response => response.text())
+            .then(svgText => {
+                const parser = new DOMParser();
+                const svgDocument = parser.parseFromString(svgText, 'image/svg+xml');
+                const svgEl = svgDocument.querySelector('svg');
+                if (!svgEl) return;
+
+                svgEl.setAttribute('focusable', 'false');
+                svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+                svgEl.style.width = '100%';
+                svgEl.style.height = '100%';
+                svgEl.style.display = 'block';
+
+                if (mapImg && mapImg.parentNode) {
+                    mapImg.parentNode.removeChild(mapImg);
+                }
+
+                transformContainer.insertBefore(svgEl, gpsDot);
+                mapGraphic = svgEl;
+                attachMapMarkers(svgEl);
+                updateTransform();
+            })
+            .catch(err => {
+                console.error('Error loading inline SVG map:', err);
+            });
+    }
+
+    // --- Button Zoom Controls ---
+    zoomInBtn.addEventListener('click', () => {
+        scale = Math.min(scale + 0.5, MAX_SCALE);
+        updateTransform();
+    });
+
+    zoomOutBtn.addEventListener('click', () => {
+        scale = Math.max(scale - 0.5, MIN_SCALE);
+        if (scale === MIN_SCALE) {
+            translateX = 0;
+            translateY = 0;
+        }
+        updateTransform();
+    });
+
+    // --- Pointer Events for Dragging ---
+    mapViewport.addEventListener('pointerdown', (e) => {
+        // Don't start drag when clicking a control button or SVG marker
+        if (e.target.closest('button') || e.target.closest('circle[data-stage]')) return;
+
+        isDragging = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+        mapViewport.setPointerCapture(e.pointerId);
+    });
+
+    mapViewport.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        updateTransform();
+    });
+
+    mapViewport.addEventListener('pointerup', (e) => {
+        isDragging = false;
+        mapViewport.releasePointerCapture(e.pointerId);
+    });
+
+    mapViewport.addEventListener('pointercancel', () => {
+        isDragging = false;
+    });
+
+    // --- Pinch to Zoom (Touch Events) ---
+    let initialPinchDistance = null;
+    let initialScale = 1;
+
+    mapViewport.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            isDragging = false;
+            initialPinchDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            initialScale = scale;
+        }
+    }, { passive: false });
+
+    mapViewport.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            const currentDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+
+            const distanceRatio = currentDistance / initialPinchDistance;
+            scale = Math.max(MIN_SCALE, Math.min(initialScale * distanceRatio, MAX_SCALE));
+            updateTransform();
+        }
+    }, { passive: false });
+
+    mapViewport.addEventListener('touchend', (e) => {
+        if (e.touches.length < 2) {
+            initialPinchDistance = null;
+        }
+    });
+
+    // --- GPS Geolocation Logic ---
+    let watchId = null;
+
+    gpsBtn.addEventListener('click', () => {
+        if (!('geolocation' in navigator)) {
+            alert('Geolocatie wordt niet ondersteund door jouw browser.');
+            return;
+        }
+
+        if (watchId !== null) {
+            navigator.geolocation.clearWatch(watchId);
+            watchId = null;
+            gpsDot.style.display = 'none';
+            gpsBtn.style.color = 'var(--color-primary)';
+            return;
+        }
+
+        gpsBtn.style.color = '#4285F4';
+
+        watchId = navigator.geolocation.watchPosition((position) => {
+            gpsDot.style.display = 'block';
+            gpsDot.style.left = '50%';
+            gpsDot.style.top = '50%';
+            console.log(`GPS Location updated: ${position.coords.latitude}, ${position.coords.longitude}`);
+        }, (error) => {
+            console.error('Error getting location:', error);
+            alert('Kan locatie niet ophalen. Controleer of je locatie-toegang hebt gegeven.');
+            gpsBtn.style.color = 'var(--color-primary)';
+            watchId = null;
+        }, {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 5000
+        });
+    });
+
+    loadInlineMap();
+    window.addEventListener('resize', updateTransform);
+});

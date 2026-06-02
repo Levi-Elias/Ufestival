@@ -79,6 +79,99 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadLineup();
 
+    function getStageDisplayName(stage, lang) {
+        const names = {
+            ponton: { nl: 'Ponton', en: 'Ponton' },
+            lake: { nl: 'The Lake', en: 'The Lake' },
+            club: { nl: 'The Club', en: 'The Club' },
+            hangar: { nl: 'Hangar', en: 'Hangar' }
+        };
+        return (names[stage] || names.ponton)[lang] || (names[stage] || names.ponton).nl;
+    }
+
+    function showStageModal(stage) {
+        const stageModal = document.getElementById('stage-modal');
+        const stageNameEl = document.getElementById('stage-modal-name');
+        const stageDescEl = document.getElementById('stage-modal-desc');
+        const stageList = document.getElementById('stage-modal-list');
+
+        if (!stageModal || !stageNameEl || !stageDescEl || !stageList) return;
+
+        const lang = window.i18n ? window.i18n.getCurrentLang() : 'nl';
+        const stageName = getStageDisplayName(stage, lang);
+        stageNameEl.textContent = stageName;
+        stageDescEl.textContent = lang === 'en'
+            ? `Line-up for ${stageName}`
+            : `Line-up voor ${stageName}`;
+
+        const stageActs = lineupData.filter(act => act.stage === stage);
+        stageList.innerHTML = '';
+
+        if (stageActs.length === 0) {
+            stageList.innerHTML = `<div class="stage-modal-entry"><span class="stage-modal-act">${lang === 'en' ? 'No acts found for this stage.' : 'Geen acts gevonden voor dit podium.'}</span></div>`;
+        } else {
+            ['saturday', 'sunday'].forEach(day => {
+                const dayActs = stageActs.filter(act => act.day === day).sort((a, b) => timeToMinutes(a.start) - timeToMinutes(b.start));
+                if (dayActs.length === 0) return;
+
+                const daySection = document.createElement('div');
+                daySection.className = 'stage-modal-day';
+
+                const dayHeading = document.createElement('h3');
+                dayHeading.textContent = lang === 'en'
+                    ? (day === 'saturday' ? 'Saturday' : 'Sunday')
+                    : (day === 'saturday' ? 'Zaterdag' : 'Zondag');
+                daySection.appendChild(dayHeading);
+
+                dayActs.forEach(act => {
+                    const item = document.createElement('div');
+                    item.className = 'stage-modal-entry';
+
+                    const time = document.createElement('span');
+                    time.className = 'stage-modal-time';
+                    time.textContent = `${act.start} - ${act.end}`;
+
+                    const label = document.createElement('span');
+                    label.className = 'stage-modal-act';
+                    label.textContent = act.name;
+
+                    item.appendChild(label);
+                    item.appendChild(time);
+                    daySection.appendChild(item);
+                });
+
+                stageList.appendChild(daySection);
+            });
+        }
+
+        stageModal.classList.add('active');
+    }
+
+    window.showStageLineup = (stage) => {
+        if (lineupData.length === 0) {
+            fetch('./data/lineup.json')
+                .then(response => response.json())
+                .then(data => {
+                    lineupData = data;
+                    showStageModal(stage);
+                })
+                .catch(err => console.error('Error loading lineup data:', err));
+            return;
+        }
+        showStageModal(stage);
+    };
+
+    const stageModal = document.getElementById('stage-modal');
+    const stageModalClose = document.getElementById('stage-modal-close');
+    if (stageModal && stageModalClose) {
+        stageModalClose.addEventListener('click', () => stageModal.classList.remove('active'));
+        stageModal.addEventListener('click', (e) => {
+            if (e.target === stageModal) {
+                stageModal.classList.remove('active');
+            }
+        });
+    }
+
     // Tab switching
     saturdayBtn.addEventListener('click', () => {
         currentDay = 'saturday';
