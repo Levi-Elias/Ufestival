@@ -1,5 +1,8 @@
 ufestival
 
+## planning
+https://trello.com/b/pEmoq76j/ufestival
+
 
 ## De app…
 
@@ -62,3 +65,35 @@ Voor leesteksten wordt gebruik gemaakt van Regular 400
 Voor knoppen en andere teksten wordt gebruik gemaakt van Light 300 Italic
 
 Alle teksten moeten goed leesbaar zijn op een mobile device.
+
+
+
+AI prompts
+
+
+https://dev.to/aaronreddix/how-to-build-progressive-web-apps-pwas-using-laravel-1f6o
+
+https://create-react-app.dev/docs/making-a-progressive-web-app/
+
+https://onsen.io/v2/guide/pwa/intro.html
+
+https://alexop.dev/posts/create-pwa-vue3-vite-4-steps/
+
+https://animejs.com/ 
+
+welke van de vijf is het beste om te gebruiken voor een festival app
+
+https://create-react-app.dev/docs/making-a-progressive-web-app/
+
+https://onsen.io/v2/guide/pwa/intro.html
+
+https://alexop.dev/posts/create-pwa-vue3-vite-4-steps/
+
+https://animejs.com/ 
+
+
+
+
+beste manier om een cms te kunnen maken met alleen javascript html css en json
+
+exporteerbaar json en instructie
