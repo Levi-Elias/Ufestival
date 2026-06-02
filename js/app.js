@@ -102,7 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (installBtn) installBtn.style.display = 'none';
             closeInstallModal();
         } else {
-            alert("Installatie via de browser is momenteel niet beschikbaar. Dit kan komen doordat de app al geïnstalleerd is, of omdat je de bestanden direct opent in plaats van via een lokale webserver (localhost).");
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            if (isIOS) {
+                alert("Op een iPhone of iPad werkt deze knop helaas niet. Apple staat dit niet toe. \n\nHoe te installeren op iOS:\n1. Tik op het 'Deel' icoontje (vierkantje met pijltje omhoog) onderaan je scherm.\n2. Scroll naar beneden en kies 'Zet op beginscherm'.");
+            } else {
+                alert("Installatie mislukt. Dit heeft meestal één van deze redenen:\n1. Je opent de website niet via een beveiligde verbinding (het moet via HTTPS of 'localhost' lopen, niet via een lokaal IP adres zoals 192.168.x.x).\n2. De app is al geïnstalleerd op je apparaat.");
+            }
             closeInstallModal();
         }
     };

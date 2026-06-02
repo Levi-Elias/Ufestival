@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ufestival-v8';
+const CACHE_NAME = 'ufestival-v10';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -16,6 +16,8 @@ const ASSETS_TO_CACHE = [
   './assets/logo_white.svg',
   './assets/logob.png',
   './assets/logow.png',
+  './assets/icon-192.png',
+  './assets/icon-512.png',
   './assets/ponton.png',
   './assets/thelake.png',
   './assets/theclub.png',
