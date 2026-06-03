@@ -171,4 +171,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Make sure map starts cleanly sized
     window.addEventListener('resize', updateTransform);
+
+    // --- Interactive Map Logic ---
+    let lineupData = [];
+    fetch('./data/lineup.json').then(res => res.json()).then(data => lineupData = data);
+
+    const stageImages = {
+        'ponton': './assets/ponton.png',
+        'lake': './assets/thelake.png',
+        'club': './assets/theclub.png',
+        'hangar': './assets/hangar.png'
+    };
+
+    document.querySelectorAll('.map-hotspot').forEach(hotspot => {
+        // Prevent map dragging when clicking hotspot
+        hotspot.addEventListener('pointerdown', (e) => {
+            e.stopPropagation();
+        });
+        
+        hotspot.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const stage = e.target.getAttribute('data-stage');
+            openStageModal(stage);
+        });
+    });
+
+    const stageModalClose = document.getElementById('stage-modal-close');
+    if (stageModalClose) {
+        stageModalClose.addEventListener('click', () => {
+            document.getElementById('stage-modal').classList.remove('active');
+        });
+    }
+
+    function openStageModal(stageKey) {
+        document.getElementById('stage-modal-image-container').innerHTML = `<img src="${stageImages[stageKey]}" alt="${stageKey}" style="width:100%; height:100%; object-fit:cover;">`;
+        
+        // Translation keys mapping
+        const stageI18n = {
+            'ponton': 'stage_ponton',
+            'lake': 'stage_lake',
+            'club': 'stage_club',
+            'hangar': 'stage_hangar'
+        };
+        const nameEl = document.getElementById('stage-modal-name');
+        nameEl.setAttribute('data-i18n', stageI18n[stageKey]);
+        if(window.i18n && window.currentLang) {
+            nameEl.textContent = window.i18n[window.currentLang][stageI18n[stageKey]] || stageKey;
+        }
+        
+        const acts = lineupData.filter(act => act.stage === stageKey);
+        acts.sort((a, b) => {
+            if (a.day !== b.day) return a.day === 'saturday' ? -1 : 1;
+            return a.start.localeCompare(b.start);
+        });
+        
+        const actsHtml = acts.map(act => {
+            // Get translation for day based on language
+            const dayKey = act.day === 'saturday' ? 'day_sat' : 'day_sun';
+            let dayStr = act.day === 'saturday' ? 'Zaterdag' : 'Zondag';
+            if(window.i18n && window.currentLang && window.i18n[window.currentLang][dayKey]) {
+                dayStr = window.i18n[window.currentLang][dayKey];
+            }
+            return `
+                <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-color);">${act.name}</h3>
+                        <span style="font-size: 0.9rem; color: var(--color-accent); font-weight: bold;">${dayStr} ${act.start} - ${act.end}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        const noActsKey = 'no_acts_found';
+        let noActsStr = 'Geen optredens gevonden.';
+        if(window.i18n && window.currentLang && window.i18n[window.currentLang][noActsKey]) {
+            noActsStr = window.i18n[window.currentLang][noActsKey];
+        }
+        
+        document.getElementById('stage-modal-acts').innerHTML = actsHtml || `<p>${noActsStr}</p>`;
+        document.getElementById('stage-modal').classList.add('active');
+    }
 });
