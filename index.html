@@ -28,7 +28,7 @@
             <span class="header-title">FESTIVAL</span>
         </div>
         <div class="header-controls">
-            <button id="install-btn" class="control-btn" aria-label="Install App" style="display: none;" title="Install App">📱</button>
+            <button id="install-btn" class="control-btn" aria-label="Download App" title="Download App">📱</button>
             <button id="theme-toggle" class="control-btn" aria-label="Toggle dark mode">🌙</button>
             <button id="lang-toggle" class="control-btn" aria-label="Toggle language">🇳🇱</button>
         </div>
@@ -161,21 +161,18 @@
         </div>
     </div>
 
-    <!-- Install Modal -->
+    <!-- QR Code Install Modal -->
     <div id="install-modal" class="modal-overlay">
         <div class="modal-content install-modal-content">
             <button id="install-modal-close" class="modal-close-btn">&times;</button>
-            <div class="modal-body" style="text-align: center;">
-                <h2 class="modal-name" data-i18n="install_title">App Installeren</h2>
-                <p class="modal-desc" data-i18n="install_desc" style="margin-bottom: 15px;">Wil je de U Festival app installeren op je apparaat voor een betere ervaring en offline toegang?</p>
-                <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                    <input type="checkbox" id="install-never-ask" style="cursor: pointer;">
-                    <label for="install-never-ask" data-i18n="install_never_ask" style="font-size: 0.9rem; cursor: pointer; color: var(--text-color); opacity: 0.8;">Niet nog een keer vragen</label>
+            <div class="modal-body" style="text-align: center; padding: 30px 24px;">
+                <div style="font-size: 2.5rem; margin-bottom: 10px;">📱</div>
+                <h2 class="modal-name" data-i18n="install_title" style="margin-bottom: 8px;">Download de app</h2>
+                <p class="modal-desc" data-i18n="install_desc" style="margin-bottom: 24px; opacity: 0.75;">Scan de QR-code met je telefoon om de app te openen en te installeren.</p>
+                <div id="qr-code-wrapper" style="display: inline-flex; align-items: center; justify-content: center; background: #fff; border-radius: 16px; padding: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); margin-bottom: 20px;">
+                    <img id="qr-code-img" src="" alt="QR Code" width="200" height="200" style="display: block; border-radius: 8px;">
                 </div>
-                <div style="display: flex; gap: 10px; justify-content: center;">
-                    <button id="install-modal-btn" class="modal-fav-btn" data-i18n="install_btn" style="background-color: var(--color-accent); color: white; border: none; font-weight: bold; margin-bottom: 0;">Installeren</button>
-                    <button id="install-modal-cancel" class="modal-fav-btn" data-i18n="install_later" style="margin-bottom: 0;">Later</button>
-                </div>
+                <p class="modal-desc" data-i18n="install_hint" style="font-size: 0.8rem; opacity: 0.5;">Werkt op iOS (Safari) en Android (Chrome)</p>
             </div>
         </div>
     </div>

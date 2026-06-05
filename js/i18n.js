@@ -23,11 +23,9 @@ const translations = {
         "news_stage_label": "Podium",
         "news_day_saturday": "Zaterdag",
         "news_day_sunday": "Zondag",
-        "install_title": "App Installeren",
-        "install_desc": "Wil je de U Festival app installeren op je apparaat voor een betere ervaring en offline toegang?",
-        "install_never_ask": "Niet nog een keer vragen",
-        "install_btn": "Installeren",
-        "install_later": "Later"
+        "install_title": "Download de app",
+        "install_desc": "Scan de QR-code met je telefoon om de app te openen en te installeren.",
+        "install_hint": "Werkt op iOS (Safari) en Android (Chrome)"
     },
     en: {
         "nav_home": "Home",
@@ -53,11 +51,9 @@ const translations = {
         "news_stage_label": "Stage",
         "news_day_saturday": "Saturday",
         "news_day_sunday": "Sunday",
-        "install_title": "Install App",
-        "install_desc": "Do you want to install the U Festival app on your device for a better experience and offline access?",
-        "install_never_ask": "Do not ask again",
-        "install_btn": "Install",
-        "install_later": "Later"
+        "install_title": "Download the app",
+        "install_desc": "Scan the QR code with your phone to open and install the app.",
+        "install_hint": "Works on iOS (Safari) and Android (Chrome)"
     }
 };
 

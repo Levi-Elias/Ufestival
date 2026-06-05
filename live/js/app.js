@@ -54,71 +54,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // PWA Install prompt handling
-    let deferredPrompt;
+    // QR Code install modal
     const installBtn = document.getElementById('install-btn');
     const installModal = document.getElementById('install-modal');
-    const installModalBtn = document.getElementById('install-modal-btn');
     const installModalClose = document.getElementById('install-modal-close');
-    const installModalCancel = document.getElementById('install-modal-cancel');
-    const installNeverAsk = document.getElementById('install-never-ask');
-    
-    window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent the mini-infobar from appearing on mobile
-        e.preventDefault();
-        // Stash the event so it can be triggered later.
-        deferredPrompt = e;
-        // Update UI notify the user they can install the PWA
-        if (installBtn) {
-            installBtn.style.display = 'flex';
-        }
-    });
+    const qrImg = document.getElementById('qr-code-img');
 
-    // Show popup after 5 seconds (if user hasn't opted out)
-    setTimeout(() => {
-        if (installModal && localStorage.getItem('pwa_install_never_ask') !== 'true') {
-            installModal.classList.add('active');
+    function openInstallModal() {
+        // Generate QR code from current page URL
+        const pageUrl = encodeURIComponent(window.location.href);
+        if (qrImg) {
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&color=000000&bgcolor=ffffff&data=${pageUrl}`;
         }
-    }, 5000);
+        if (installModal) installModal.classList.add('active');
+    }
 
-    const closeInstallModal = () => {
-        if (installModal) {
-            if (installNeverAsk && installNeverAsk.checked) {
-                localStorage.setItem('pwa_install_never_ask', 'true');
-            }
-            installModal.classList.remove('active');
-        }
-    };
+    function closeInstallModal() {
+        if (installModal) installModal.classList.remove('active');
+    }
 
+    if (installBtn) installBtn.addEventListener('click', openInstallModal);
     if (installModalClose) installModalClose.addEventListener('click', closeInstallModal);
-    if (installModalCancel) installModalCancel.addEventListener('click', closeInstallModal);
 
-    const performInstall = async () => {
-        if (deferredPrompt) {
-            // Show the install prompt
-            deferredPrompt.prompt();
-            // Wait for the user to respond to the prompt
-            const { outcome } = await deferredPrompt.userChoice;
-            console.log(`User response to the install prompt: ${outcome}`);
-            // We've used the prompt, and can't use it again, throw it away
-            deferredPrompt = null;
-            // Hide the app provided install promotion
-            if (installBtn) installBtn.style.display = 'none';
-            closeInstallModal();
-        } else {
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            if (isIOS) {
-                alert("Op een iPhone of iPad werkt deze knop helaas niet. Apple staat dit niet toe. \n\nHoe te installeren op iOS:\n1. Tik op het 'Deel' icoontje (vierkantje met pijltje omhoog) onderaan je scherm.\n2. Scroll naar beneden en kies 'Zet op beginscherm'.");
-            } else {
-                alert("Installatie mislukt. Dit heeft meestal één van deze redenen:\n1. Je opent de website niet via een beveiligde verbinding (het moet via HTTPS of 'localhost' lopen, niet via een lokaal IP adres zoals 192.168.x.x).\n2. De app is al geïnstalleerd op je apparaat.");
-            }
-            closeInstallModal();
-        }
-    };
-
-    if (installModalBtn) installModalBtn.addEventListener('click', performInstall);
-    
-    if (installBtn) {
-        installBtn.addEventListener('click', performInstall);
+    // Close on backdrop click
+    if (installModal) {
+        installModal.addEventListener('click', (e) => {
+            if (e.target === installModal) closeInstallModal();
+        });
     }
 });
+
