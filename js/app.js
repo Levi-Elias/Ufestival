@@ -55,32 +55,49 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // QR Code install modal
-    const installBtn = document.getElementById('install-btn');
-    const installModal = document.getElementById('install-modal');
+    const installBtn    = document.getElementById('install-btn');
+    const installModal  = document.getElementById('install-modal');
     const installModalClose = document.getElementById('install-modal-close');
     const qrImg = document.getElementById('qr-code-img');
 
+    // Detect platform to show the right step-2 instruction
+    const isIOS     = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const iosSteps  = document.querySelectorAll('.install-ios');
+    const droidSteps= document.querySelectorAll('.install-android');
+
+    iosSteps.forEach(el   => el.style.display = isIOS ? 'inline' : 'none');
+    droidSteps.forEach(el => el.style.display = isIOS ? 'none'   : 'inline');
+
+    // Android: capture the native install prompt so we can trigger it later
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+    });
+
     function openInstallModal() {
-        // Generate QR code from current page URL
         const pageUrl = encodeURIComponent(window.location.href);
         if (qrImg) {
             qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&color=000000&bgcolor=ffffff&data=${pageUrl}`;
         }
         if (installModal) installModal.classList.add('active');
+
+        // On Android, also trigger the native install prompt if available
+        if (!isIOS && deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+        }
     }
 
     function closeInstallModal() {
         if (installModal) installModal.classList.remove('active');
     }
 
-    if (installBtn) installBtn.addEventListener('click', openInstallModal);
-    if (installModalClose) installModalClose.addEventListener('click', closeInstallModal);
-
-    // Close on backdrop click
+    if (installBtn)         installBtn.addEventListener('click', openInstallModal);
+    if (installModalClose)  installModalClose.addEventListener('click', closeInstallModal);
     if (installModal) {
         installModal.addEventListener('click', (e) => {
             if (e.target === installModal) closeInstallModal();
         });
     }
 });
-

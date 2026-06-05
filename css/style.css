@@ -883,6 +883,30 @@ nav.bottom-nav {
   line-height: 1.6;
 }
 
+/* Install step list */
+.install-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text-color);
+}
+
+.install-step-num {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  background: var(--color-accent);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
 /* Map Styles */
 .map-viewport {
   position: relative;
