@@ -366,13 +366,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         descEl.innerHTML = act.description[currentLang] + videoHtml;
-        modalStageTime.textContent = `Stage: ${act.stage.charAt(0).toUpperCase() + act.stage.slice(1)} | ${act.start} - ${act.end}`;
+        const stageLabel = window.i18n ? window.i18n.get('modal_stage_label') : 'Stage';
+        modalStageTime.textContent = `${stageLabel}: ${act.stage.charAt(0).toUpperCase() + act.stage.slice(1)} | ${act.start} - ${act.end}`;
         
         modal.setAttribute('data-active-id', act.id);
         document.getElementById('modal-name').textContent = act.name;
         
         const favs = getFavorites();
-        modalFavBtn.innerHTML = favs.includes(act.id) ? '❤️ Verwijder uit favorieten' : '♡ Voeg toe aan favorieten';
+        const favAddTxt = window.i18n ? window.i18n.get('modal_fav_add') : '\u2661 Add to favourites';
+        const favRemoveTxt = window.i18n ? window.i18n.get('modal_fav_remove') : '\u2764\ufe0f Remove from favourites';
+        modalFavBtn.innerHTML = favs.includes(act.id) ? favRemoveTxt : favAddTxt;
         
         // Remove old event listener and add a new one to avoid stacking
         modalFavBtn.replaceWith(modalFavBtn.cloneNode(true));
@@ -381,7 +384,9 @@ document.addEventListener('DOMContentLoaded', () => {
         newFavBtn.addEventListener('click', () => {
             toggleFavorite(act.id);
             const isFav = getFavorites().includes(act.id);
-            newFavBtn.innerHTML = isFav ? '❤️ Verwijder uit favorieten' : '♡ Voeg toe aan favorieten';
+            const _add = window.i18n ? window.i18n.get('modal_fav_add') : '\u2661 Add to favourites';
+            const _rem = window.i18n ? window.i18n.get('modal_fav_remove') : '\u2764\ufe0f Remove from favourites';
+            newFavBtn.innerHTML = isFav ? _rem : _add;
             // Re-render schedule to update heart icons there too
             renderSchedule(currentDay);
         });

@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         }, (error) => {
             console.error('Error getting location:', error);
-            alert('Kan locatie niet ophalen. Controleer of je locatie-toegang hebt gegeven.');
+            alert(window.i18n ? window.i18n.get('gps_error') : 'Could not get your location.');
             gpsBtn.style.color = 'var(--color-primary)';
             watchId = null;
         }, {
@@ -174,7 +174,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Interactive Map Logic ---
     let lineupData = [];
+    let currentOpenStage = null; // track which stage modal is open
     fetch('./data/lineup.json').then(res => res.json()).then(data => lineupData = data);
+
+    // Re-render stage modal when language changes
+    document.addEventListener('languageChanged', () => {
+        if (currentOpenStage && document.getElementById('stage-modal').classList.contains('active')) {
+            openStageModal(currentOpenStage);
+        }
+    });
 
     const stageImages = {
         'ponton': './assets/ponton.png',
@@ -200,10 +208,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (stageModalClose) {
         stageModalClose.addEventListener('click', () => {
             document.getElementById('stage-modal').classList.remove('active');
+            currentOpenStage = null;
         });
     }
 
     function openStageModal(stageKey) {
+        currentOpenStage = stageKey;
         document.getElementById('stage-modal-image-container').innerHTML = `<img src="${stageImages[stageKey]}" alt="${stageKey}" style="width:100%; height:100%; object-fit:cover;">`;
         
         // Translation keys mapping
@@ -215,9 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         const nameEl = document.getElementById('stage-modal-name');
         nameEl.setAttribute('data-i18n', stageI18n[stageKey]);
-        if(window.i18n && window.currentLang) {
-            nameEl.textContent = window.i18n[window.currentLang][stageI18n[stageKey]] || stageKey;
-        }
+        nameEl.textContent = window.i18n ? window.i18n.get(stageI18n[stageKey]) : stageKey;
         
         const acts = lineupData.filter(act => act.stage === stageKey);
         acts.sort((a, b) => {
@@ -227,11 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const actsHtml = acts.map(act => {
             // Get translation for day based on language
-            const dayKey = act.day === 'saturday' ? 'day_sat' : 'day_sun';
-            let dayStr = act.day === 'saturday' ? 'Zaterdag' : 'Zondag';
-            if(window.i18n && window.currentLang && window.i18n[window.currentLang][dayKey]) {
-                dayStr = window.i18n[window.currentLang][dayKey];
-            }
+            const dayKey = act.day === 'saturday' ? 'news_day_saturday' : 'news_day_sunday';
+            const dayStr = window.i18n ? window.i18n.get(dayKey) : (act.day === 'saturday' ? 'Zaterdag' : 'Zondag');
             return `
                 <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
@@ -242,12 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }).join('');
         
-        const noActsKey = 'no_acts_found';
-        let noActsStr = 'Geen optredens gevonden.';
-        if(window.i18n && window.currentLang && window.i18n[window.currentLang][noActsKey]) {
-            noActsStr = window.i18n[window.currentLang][noActsKey];
-        }
-        
+        const noActsStr = window.i18n ? window.i18n.get('no_acts_stage') : 'Geen optredens gevonden.';
         document.getElementById('stage-modal-acts').innerHTML = actsHtml || `<p>${noActsStr}</p>`;
         document.getElementById('stage-modal').classList.add('active');
     }
