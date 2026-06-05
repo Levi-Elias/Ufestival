@@ -24,8 +24,11 @@ const translations = {
         "news_day_saturday": "Zaterdag",
         "news_day_sunday": "Zondag",
         "install_title": "Download de app",
-        "install_desc": "Scan de QR-code met je telefoon om de app te openen en te installeren.",
-        "install_hint": "Werkt op iOS (Safari) en Android (Chrome)"
+        "install_desc": "Scan de QR-code met de camera van je telefoon.",
+        "install_step1": "Scan de QR-code — de website opent in je browser",
+        "install_step2_ios": "Tik op het Deel-icoontje \u2192 \"Zet op beginscherm\"",
+        "install_step2_android": "Tik op \"Installeren\" of het menu \u2192 \"Toevoegen aan startscherm\"",
+        "install_step3": "Open de app vanaf je beginscherm \ud83c\udf89"
     },
     en: {
         "nav_home": "Home",
@@ -52,8 +55,11 @@ const translations = {
         "news_day_saturday": "Saturday",
         "news_day_sunday": "Sunday",
         "install_title": "Download the app",
-        "install_desc": "Scan the QR code with your phone to open and install the app.",
-        "install_hint": "Works on iOS (Safari) and Android (Chrome)"
+        "install_desc": "Scan the QR code with your phone's camera.",
+        "install_step1": "Scan the QR code — the website opens in your browser",
+        "install_step2_ios": "Tap the Share icon \u2192 \"Add to Home Screen\"",
+        "install_step2_android": "Tap \"Install\" or the menu \u2192 \"Add to Home Screen\"",
+        "install_step3": "Open the app from your home screen \ud83c\udf89"
     }
 };
 
