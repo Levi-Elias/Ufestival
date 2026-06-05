@@ -67,7 +67,7 @@ let currentLang = localStorage.getItem('language') || 'nl';
 
 document.addEventListener('DOMContentLoaded', () => {
     const langBtn = document.getElementById('lang-toggle');
-    
+
     // Set initial language
     setLanguage(currentLang);
 
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function setLanguage(lang) {
     localStorage.setItem('language', lang);
     const langBtn = document.getElementById('lang-toggle');
-    
+
     // Update button text/icon
     if (lang === 'nl') {
         langBtn.textContent = '🇳🇱';
@@ -101,7 +101,7 @@ function setLanguage(lang) {
             }
         }
     });
-    
+
     // Dispatch custom event for other scripts that might need to react to language changes
     document.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang: lang } }));
 }

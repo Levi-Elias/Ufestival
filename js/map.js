@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             );
             initialScale = scale;
         }
-    }, {passive: false});
+    }, { passive: false });
 
     mapViewport.addEventListener('touchmove', (e) => {
         if (e.touches.length === 2) {
@@ -103,12 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.touches[0].clientX - e.touches[1].clientX,
                 e.touches[0].clientY - e.touches[1].clientY
             );
-            
+
             const distanceRatio = currentDistance / initialPinchDistance;
             scale = Math.max(MIN_SCALE, Math.min(initialScale * distanceRatio, MAX_SCALE));
             updateTransform();
         }
-    }, {passive: false});
+    }, { passive: false });
 
     mapViewport.addEventListener('touchend', (e) => {
         if (e.touches.length < 2) {
@@ -144,14 +144,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // In a real scenario, you need to map lat/lon bounds of the physical festival location 
             // to the X/Y pixel bounds of your kaart_festival_markers.svg.
             // For this demo, we'll place the dot in the center, or randomly, as an example.
-            
+
             // DEMO: Place dot relatively in the center to show it works
             gpsDot.style.display = 'block';
             gpsDot.style.left = '50%';
             gpsDot.style.top = '50%';
-            
+
             console.log(`GPS Location updated: ${lat}, ${lon}`);
-            
+
             // To implement real mapping, you'd calculate percentages:
             // const mapLatMin = 52.0; const mapLatMax = 52.1;
             // const topPercent = ((mapLatMax - lat) / (mapLatMax - mapLatMin)) * 100;
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hotspot.addEventListener('pointerdown', (e) => {
             e.stopPropagation();
         });
-        
+
         hotspot.addEventListener('click', (e) => {
             e.stopPropagation();
             const stage = e.target.getAttribute('data-stage');
@@ -215,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function openStageModal(stageKey) {
         currentOpenStage = stageKey;
         document.getElementById('stage-modal-image-container').innerHTML = `<img src="${stageImages[stageKey]}" alt="${stageKey}" style="width:100%; height:100%; object-fit:cover;">`;
-        
+
         // Translation keys mapping
         const stageI18n = {
             'ponton': 'stage_ponton',
@@ -226,13 +226,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const nameEl = document.getElementById('stage-modal-name');
         nameEl.setAttribute('data-i18n', stageI18n[stageKey]);
         nameEl.textContent = window.i18n ? window.i18n.get(stageI18n[stageKey]) : stageKey;
-        
+
         const acts = lineupData.filter(act => act.stage === stageKey);
         acts.sort((a, b) => {
             if (a.day !== b.day) return a.day === 'saturday' ? -1 : 1;
             return a.start.localeCompare(b.start);
         });
-        
+
         const actsHtml = acts.map(act => {
             // Get translation for day based on language
             const dayKey = act.day === 'saturday' ? 'news_day_saturday' : 'news_day_sunday';
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         }).join('');
-        
+
         const noActsStr = window.i18n ? window.i18n.get('no_acts_stage') : 'Geen optredens gevonden.';
         document.getElementById('stage-modal-acts').innerHTML = actsHtml || `<p>${noActsStr}</p>`;
         document.getElementById('stage-modal').classList.add('active');

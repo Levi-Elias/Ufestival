@@ -269,8 +269,15 @@ nav.bottom-nav {
 }
 
 @keyframes newsFadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .news-act-inner {
@@ -329,8 +336,13 @@ nav.bottom-nav {
   white-space: nowrap;
 }
 
-.news-act-stage { color: #E3B505; }
-.news-act-time  { color: rgba(255,255,255,0.75); }
+.news-act-stage {
+  color: #E3B505;
+}
+
+.news-act-time {
+  color: rgba(255, 255, 255, 0.75);
+}
 
 .news-act-day {
   font-family: var(--font-family);
@@ -521,7 +533,7 @@ nav.bottom-nav {
   border-top: 0px solid var(--border-color);
 }
 
-.accordion-header.active + .accordion-content {
+.accordion-header.active+.accordion-content {
   border-top-width: 1px;
 }
 
@@ -535,7 +547,7 @@ nav.bottom-nav {
   opacity: 0.85;
 }
 
-.accordion-content p + p {
+.accordion-content p+p {
   padding-top: 0;
 }
 
@@ -563,7 +575,7 @@ nav.bottom-nav {
 }
 
 /* last item inside content gets bottom padding */
-.accordion-content > *:last-child {
+.accordion-content>*:last-child {
   padding-bottom: 16px;
 }
 
